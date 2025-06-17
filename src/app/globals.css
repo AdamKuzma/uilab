@@ -50,8 +50,9 @@
 
 :root {
   --radius: 0.625rem;
-  --background: #f9f9f9;
+  --background: #f8f8f8;
   --secondary-background: #f2f2f2;
+  --muted-background: #ececec;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -86,14 +87,15 @@
 
 .dark {
   --background: oklch(0.145 0 0);
-  --secondary-background: #141414;
+  --secondary-background: #131313;
+  --muted-background: #202020;
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.1885 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -101,7 +103,7 @@
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
+  --border: oklch(1 0 0 / 6%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.488 0.243 264.376);
@@ -229,6 +231,11 @@
   font-size: 14px;
 }
 
+main {
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1' cy='1' r='1' fill='%23666' fill-opacity='0.15'/%3E%3C/svg%3E");
+  background-size: 20px 20px;
+}
+
 .feedback-popover {
   position: absolute;
   height: 192px;
@@ -336,11 +343,11 @@
   height: 24px;
   width: 104px;
   overflow: hidden;
-  background: linear-gradient(180deg, #1994ff 0%, #157cff 100%);
+  background: linear-gradient(180deg, #7E1ED2 0%, #7110C5 100%);
   box-shadow:
     0px 0px 1px 1px rgba(255, 255, 255, 0.08) inset,
     0px 1px 1.5px 0px rgba(0, 0, 0, 0.32),
-    0px 0px 0px 0.5px #1a94ff;
+    0px 0px 0px 0.5px #7110C5;
   position: relative;
 }
 
@@ -364,15 +371,44 @@
   border-radius: 8px;
   font-weight: 500;
   font-size: 13px;
-  height: 32px;
+  height: 34px;
   width: 148px;
   overflow: hidden;
-  background: linear-gradient(180deg, #1994ff 0%, #157cff 100%);
+  background: linear-gradient(180deg, #7E1ED2 0%, #7110C5 100%);
   box-shadow:
     0px 0px 1px 1px rgba(255, 255, 255, 0.08) inset,
     0px 1px 1.5px 0px rgba(0, 0, 0, 0.32),
-    0px 0px 0px 0.5px #1a94ff;
+    0px 0px 0px 0.5px #7E1ED2;
   position: relative;
+  cursor: pointer;
+}
+
+.smooth-button.is-loading,
+.smooth-button.is-success,
+.smooth-button:disabled {
+  cursor: default;
+}
+
+.smooth-button.is-loading:active,
+.smooth-button.is-success:active,
+.smooth-button:disabled:active {
+  background: linear-gradient(180deg, #7E1ED2 0%, #7110C5 100%);
+  box-shadow:
+    0px 0px 1px 1px rgba(255, 255, 255, 0.08) inset,
+    0px 1px 1.5px 0px rgba(0, 0, 0, 0.32),
+    0px 0px 0px 0.5px #7E1ED2;
+  transform: none;
+  /* Or whatever your default style is */
+}
+
+.smooth-button:active {
+  background: linear-gradient(180deg, #7110C5 0%, #6208B0 100%);
+  box-shadow:
+    0px 0px 1px 1px rgba(255, 255, 255, 0.08) inset,
+    0px 1px 1.5px 0px rgba(0, 0, 0, 0.32),
+    0px 0px 0px 0.5px #7E1ED2;
+  position: relative;
+  cursor: pointer;
 }
 
 .smooth-button span {

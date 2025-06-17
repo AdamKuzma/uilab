@@ -7,9 +7,9 @@ import { Spinner } from "./Spinner";
 type ButtonState = "idle" | "loading" | "success";
 
 const buttonCopy = {
-  idle: "Send feedback",
+  idle: "Send Message",
   loading: <Spinner size={16} color="rgba(255, 255, 255, 0.65)" />,
-  success: "Feedback sent!",
+  success: "Message Sent!",
 } as const;
 
 export default function SmoothButton() {
@@ -18,7 +18,7 @@ export default function SmoothButton() {
   return (
     <div className="outer-wrapper">
       <button 
-        className="smooth-button" 
+        className={`smooth-button${buttonState === "loading" ? ' is-loading' : ''}${buttonState === "success" ? ' is-success' : ''}`}
         disabled={buttonState !== "idle"} 
         onClick={() => {
           setButtonState("loading");

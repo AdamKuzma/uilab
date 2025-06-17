@@ -1,8 +1,10 @@
 import { TextShimmer } from "@/components/TextShimmer";
 import { Typewriter } from "@/components/Typewriter";
-import { Showcase } from "@/components/Showcase";
+import { Showcase } from "@/parts/Showcase";
 import FeedbackPopover from "@/components/FeedbackPopover";
 import SmoothButton from "@/components/SmoothButton";
+import SmoothTabs from "@/components/SmoothTabs";
+import SmoothList from "@/components/SmoothList";
 
 export default function Home() {
   return (
@@ -73,6 +75,25 @@ export default function Home() {
           <FeedbackPopover />
         </Showcase>
 
+        <div className="h-16" />
+
+        <Showcase
+          title="SmoothTabs"
+          description="A smooth tab navigation component with hover effects"
+          tags={["Navigation", "Interactive"]}
+        >
+          <SmoothTabs />
+        </Showcase>
+
+        <div className="h-16" />
+
+        <Showcase
+          title="SmoothList"
+          description="A smooth tab navigation component with hover effects"
+          tags={["Navigation", "Interactive"]}
+        >
+          <SmoothList />
+        </Showcase>
 
       </div>
     </div>

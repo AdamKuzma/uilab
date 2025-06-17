@@ -8,7 +8,7 @@ interface SpinnerProps {
 }
 
 export const Spinner: React.FC<SpinnerProps> = ({ 
-  size = 20, 
+  size = 20,
   color = '#000000',
   className = ''
 }) => {

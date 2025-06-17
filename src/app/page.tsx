@@ -1,5 +1,5 @@
 import { TextShimmer } from "@/components/TextShimmer";
-import Typewriter from "@/components/Typewriter";
+// import Typewriter from "@/components/Typewriter";
 import { Showcase } from "@/parts/Showcase";
 import FeedbackPopover from "@/components/FeedbackPopover";
 import SmoothButton from "@/components/SmoothButton";
@@ -28,7 +28,7 @@ export default function Home() {
         <div className="h-16" />
 
         {/* Typewriter Showcase */}
-        <Showcase
+        {/* <Showcase
           title="Typewriter"
           description="Animated typewriter effect for cycling through text. Supports custom speed, cursor, and looping."
           tags={["react", "framer-motion", "animation"]}
@@ -50,7 +50,7 @@ export default function Home() {
               cursorChar={"_"}
             />
           </div>
-        </Showcase>
+        </Showcase> */}
 
         {/* Spacer */}
         <div className="h-16" />

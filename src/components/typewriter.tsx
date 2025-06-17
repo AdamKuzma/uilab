@@ -131,4 +131,4 @@ const Typewriter = ({
   )
 }
 
-export { Typewriter } 
+export default Typewriter 

@@ -1,5 +1,5 @@
 import { TextShimmer } from "@/components/TextShimmer";
-import { Typewriter } from "@/components/Typewriter";
+import Typewriter from "@/components/Typewriter";
 import { Showcase } from "@/parts/Showcase";
 import FeedbackPopover from "@/components/FeedbackPopover";
 import SmoothButton from "@/components/SmoothButton";

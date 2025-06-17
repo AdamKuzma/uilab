@@ -27,7 +27,7 @@ export default function Home() {
         {/* Spacer */}
         <div className="h-16" />
 
-        {/* Typewriter Showcase */}
+        {/* Typewriter Showcase sfgdf */}
         <Showcase
           title="Typewriter"
           description="Animated typewriter effect for cycling through text. Supports custom speed, cursor, and looping."

@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@font-face {
+  font-family: 'Pixelify Sans';
+  src: url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap');
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -45,7 +50,8 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: #f9f9f9;
+  --secondary-background: #f2f2f2;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -80,6 +86,7 @@
 
 .dark {
   --background: oklch(0.145 0 0);
+  --secondary-background: #141414;
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
@@ -116,20 +123,83 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body, html {
-    background: #141414 !important;
-    @apply bg-[#141414] text-foreground;
+  html, body {
+    background: var(--color-background) !important;
+    @apply text-foreground overscroll-none;
+    overscroll-behavior: none;
   }
 }
 
 @layer utilities {
   .container-main {
     width: 100%;
-    max-width: 1300px;
     padding-left: 30px;
     padding-right: 30px;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .logo {
+    font-family: var(--font-pixelify), sans-serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    text-align: left;
+    letter-spacing: -0.025em;
+  }
+
+  .toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 21px;
+    height: 17px;
+    margin-right: 12px;
+    vertical-align: middle;
+  }
+
+  .toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #111;
+    transition: .4s;
+    border-radius: 6px;
+  }
+
+  .toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 9px;
+    width: 9px;
+    left: 3px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+
+  input:checked + .toggle-slider {
+    background-color: #fff;
+  }
+
+  input:checked + .toggle-slider:before {
+    transform: translateX(6px);
+    background-color: #000;
+  }
+
+  .hide-scrollbar {
+    scrollbar-width: none; /* Firefox */
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
   }
 }
 

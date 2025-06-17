@@ -1,26 +1,26 @@
 "use client";
 
-import { TextShimmer } from "@/components/TextShimmer";
+// import { TextShimmer } from "@/components/TextShimmer";
 // import Typewriter from "@/components/Typewriter";
 // import { Showcase } from "@/parts/Showcase";
-import FeedbackPopover from "@/components/FeedbackPopover";
+// import FeedbackPopover from "@/components/FeedbackPopover";
 import SmoothButton from "@/components/SmoothButton";
 import SmoothTabs from "@/components/SmoothTabs";
 import SmoothList from "@/components/SmoothList";
-import { Spinner } from "@/components/Spinner";
+// import { Spinner } from "@/components/Spinner";
 import { useTheme } from "@/context/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback, useRef } from "react";
 
 const components = [
-  {
-    id: "text-shimmer",
-    title: "Text Shimmer",
-    description: "A beautiful text shimmer effect that adds a subtle animation to your text.",
-    component: <TextShimmer duration={1.3} className="" disabled={false} />,
-    preview: <TextShimmer duration={1.3} className="" disabled={true} />,
-    thumbnail: "/thumbnails/text-shimmer.png"
-  },
+  // {
+  //   id: "text-shimmer",
+  //   title: "Text Shimmer",
+  //   description: "A beautiful text shimmer effect that adds a subtle animation to your text.",
+  //   component: <TextShimmer duration={1.3} className="" disabled={false} />,
+  //   preview: <TextShimmer duration={1.3} className="" disabled={true} />,
+  //   thumbnail: "/thumbnails/text-shimmer.png"
+  // },
   {
     id: "smooth-button",
     title: "Smooth Button",
@@ -41,14 +41,6 @@ const components = [
       </div>
     ),
     thumbnail: "/thumbnails/smooth-tabs.png"
-  },
-  {
-    id: "spinner",
-    title: "Spinner",
-    description: "A loading spinner with smooth animation.",
-    component: <Spinner />,
-    preview: <Spinner />,
-    thumbnail: "/thumbnails/spinner.png"
   },
   {
     id: "smooth-list",

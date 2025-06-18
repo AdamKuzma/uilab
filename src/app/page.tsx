@@ -2,12 +2,12 @@
 
 // import { TextShimmer } from "@/components/TextShimmer";
 // import Typewriter from "@/components/Typewriter";
-// import { Showcase } from "@/parts/Showcase";
-// import FeedbackPopover from "@/components/FeedbackPopover";
+// import { Spinner } from "@/components/Spinner";
+import FeedbackPopover from "@/components/FeedbackPopover";
 import SmoothButton from "@/components/SmoothButton";
 import SmoothTabs from "@/components/SmoothTabs";
 import SmoothList from "@/components/SmoothList";
-// import { Spinner } from "@/components/Spinner";
+import MultistepForm from "@/components/MultistepForm";
 import { useTheme } from "@/context/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback, useRef } from "react";
@@ -42,6 +42,34 @@ const components = [
       </div>
     ),
     tags: ["react", "framer motion"],
+  },
+  {
+    id: "feedback-popover",
+    title: "Feedback Popover",
+    description: "A popover component with feedback for user interactions.",
+    component: <FeedbackPopover />,
+    preview: (
+      <div className="space-y-1">
+        <div className="h-3 w-12 bg-gray-200 rounded" />
+        <div className="h-3 w-16 bg-gray-200 rounded" />
+        <div className="h-3 w-10 bg-gray-200 rounded" />
+      </div>
+    ),
+    tags: ["react", "framer motion", "tailwind"],
+  },
+  {
+    id: "multistep-form",
+    title: "Multistep Form",
+    description: "A multistep form component with smooth transitions between steps.",
+    component: <MultistepForm />,
+    preview: (
+      <div className="space-y-1">
+        <div className="h-3 w-12 bg-gray-200 rounded" />
+        <div className="h-3 w-16 bg-gray-200 rounded" />
+        <div className="h-3 w-10 bg-gray-200 rounded" />
+      </div>
+    ),
+    tags: ["react", "framer motion", "tailwind"],
   }
 ];
 
@@ -203,6 +231,8 @@ export default function Home() {
             </AnimatePresence>
           </div>
         </div>
+
+        {/* Footer */}
         <footer className="mt-8 mb-8">
           <p className="text-xs text-muted-foreground">Designed and built by Adam Kuzma</p>
         </footer>

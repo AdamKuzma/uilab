@@ -47,33 +47,45 @@ export default function FeedbackPopover() {
   
     return (
       <div className="feedback-wrapper">
-        <button
+        <motion.button
+          layoutId="wrapper"
           onClick={() => {
             setOpen(true);
             setFormState("idle");
             setFeedback("");
           }}
-          className="feedback-button"
+          className="feedback-button cursor-pointer"
           style={{ borderRadius: 8 }}
         >
-          <span className="text-neutral-700">Feedback</span>
-        </button>
+          <motion.span className="text-neutral-700" layoutId="title">Feedback</motion.span>
+        </motion.button>
+        
+        <AnimatePresence>
         {open ? (
-          <div
+          <motion.div
             className="feedback-popover"
             style={{ borderRadius: 12 }}
             ref={ref}
+            layoutId="wrapper"
           >
-            <span
+            <motion.span
               aria-hidden
+              layoutId="title"
               className="placeholder"
               data-feedback={feedback ? "true" : "false"}
             >
               Feedback
-            </span>
-  
+            </motion.span>
+
+            <AnimatePresence mode="popLayout">
             {formState === "success" ? (
-              <div className="success-wrapper">
+              <motion.div 
+                className="success-wrapper" 
+                initial={{ y: -32, opacity: 0, filter: "blur(4px)" }} 
+                animate={{ y: 0, opacity: 1, filter: "blur(0px)" }} 
+                transition={{ type: "spring", duration: 0.4, bounce: 0 }}
+                layoutId="success-wrapper"
+              >
                 <svg
                   width="32"
                   height="32"
@@ -96,9 +108,11 @@ export default function FeedbackPopover() {
                 </svg>
                 <h3>Feedback received!</h3>
                 <p>Thanks for helping me improve Sonner.</p>
-              </div>
+              </motion.div>
             ) : (
-              <form
+              <motion.form
+                exit={{ y: 8, opacity: 0, filter: "blur(4px)" }} 
+                transition={{ type: "spring", duration: 0.4, bounce: 0 }}
                 onSubmit={(e) => {
                   e.preventDefault();
                   if(!feedback) return;
@@ -180,7 +194,7 @@ export default function FeedbackPopover() {
                     </svg>
                   </div>
   
-                  <button type="submit" className="submit-button">
+                  <button type="submit" className="submit-button cursor-pointer">
                     <AnimatePresence mode="popLayout" initial={false}>
                       <motion.span
                         transition={{
@@ -202,10 +216,12 @@ export default function FeedbackPopover() {
                     </AnimatePresence>
                   </button>
                 </div>
-              </form>
+              </motion.form>
             )}
-          </div>
+            </AnimatePresence>
+          </motion.div>
         ) : null}
+        </AnimatePresence>
       </div>
     );
   }

@@ -8,9 +8,36 @@ import SmoothButton from "@/components/SmoothButton";
 import SmoothTabs from "@/components/SmoothTabs";
 import SmoothList from "@/components/SmoothList";
 import MultistepForm from "@/components/MultistepForm";
+import TrashAnimation from "@/components/TrashAnimation";
 import { useTheme } from "@/context/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback, useRef } from "react";
+
+// Client-only theme toggle component
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <label className="toggle-switch">
+        <input type="checkbox" checked={false} readOnly />
+        <span className="toggle-slider"></span>
+      </label>
+    );
+  }
+
+  return (
+    <label className="toggle-switch">
+      <input type="checkbox" checked={theme === "dark"} onChange={toggleTheme} />
+      <span className="toggle-slider"></span>
+    </label>
+  );
+}
 
 const components = [
   {
@@ -70,11 +97,24 @@ const components = [
       </div>
     ),
     tags: ["react", "framer motion", "tailwind"],
+  },
+  {
+    id: "trash-animation",
+    title: "Trash Animation",
+    description: "A trash animation component with smooth transitions between steps.",
+    component: <TrashAnimation />,
+    preview: (
+      <div className="space-y-1">
+        <div className="h-3 w-12 bg-gray-200 rounded" />
+        <div className="h-3 w-16 bg-gray-200 rounded" />
+        <div className="h-3 w-10 bg-gray-200 rounded" />
+      </div>
+    ),
+    tags: ["react", "framer motion", "tailwind"],
   }
 ];
 
 export default function Home() {
-  const { theme, toggleTheme } = useTheme();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -142,10 +182,7 @@ export default function Home() {
       <header className="w-full z-10 relative">
         <div className="container-main py-6">
           <div className="flex items-center">
-            <label className="toggle-switch">
-              <input type="checkbox" checked={theme === "dark"} onChange={toggleTheme} />
-              <span className="toggle-slider"></span>
-            </label>
+            <ThemeToggle />
             <h1 className="logo">UI Playground</h1>
           </div>
         </div>

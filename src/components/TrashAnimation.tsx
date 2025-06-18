@@ -1,7 +1,8 @@
 'use client';
 
-import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { TrashBack, TrashFront } from './TrashAssets';
 import clsx from 'clsx';
 
@@ -68,7 +69,7 @@ export default function TrashAnimation() {
                     }
                   }}
                 >
-                  <img
+                  <Image
                     className="rounded-xl"
                     alt="A guy"
                     src={`https://animations-on-the-web-git-how-i-use-3066e1-emilkowalski-s-team.vercel.app/how-i-use-framer-motion/why-framer-motion/${image}.webp`}

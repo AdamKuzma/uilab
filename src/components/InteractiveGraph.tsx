@@ -1,6 +1,5 @@
-import { useSpring, useMotionTemplate, motion } from "framer-motion";
 import { useRef, useState } from "react";
-
+import { useSpring, animated } from "@react-spring/web";
 
 const SPRING = {
     damping: 20,
@@ -11,12 +10,44 @@ const SLOW_SPRING = {
     damping: 40
 }
 
-
 export default function Graph() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [isHovering, setIsHovering] = useState(false);
-  const clipPathValue = useSpring(0, isHovering ? SPRING : SLOW_SPRING);
-  const clipPathTemplate = useMotionTemplate`inset(0px ${clipPathValue}% 0px 0px)`;
+  const [selectedPeriod, setSelectedPeriod] = useState<"1D" | "1M" | "1Y" | "5Y">("1M");
+  
+  const timePeriods = ["1D", "1M", "1Y", "5Y"] as const;
+
+  // Different path data for each time period
+  const pathData = {
+    "1D": "M1 110s30-20 60-10s40 30 80-5s20-40 60-15s40 25 80-10s30-35 60-5s40 20 80-15s30-25 60-10s40 15 80-5",
+    "1M": "M1 120s50-40 100-20s80 60 120 10s60-80 100-30s80 50 120-40s60 70 100-20s80-60 120 30s60 40 100-50s80 20 100 40",
+    "1Y": "M1 100s30-60 80-20s60 80 120-10s40-90 100-20s80 70 120-60s60 90 100-30s80-80 120 40s60 20 100-30s80 40 100 60",
+    "5Y": "M1 80s20-40 60-10s40 60 100-20s30-70 80-15s60 50 100-30s40 80 80-10s60-60 100 20s40 30 80-20s60 20 100 30"
+  };
+
+  const fillData = {
+    "1D": "M1 110s30-20 60-10s40 30 80-5s20-40 60-15s40 25 80-10s30-35 60-5s40 20 80-15s30-25 60-10s40 15 80-5V188H1V110z",
+    "1M": "M1 120s50-40 100-20s80 60 120 10s60-80 100-30s80 50 120-40s60 70 100-20s80-60 120 30s60 40 100-50s80 20 100 40V188H1V120z",
+    "1Y": "M1 100s30-60 80-20s60 80 120-10s40-90 100-20s80 70 120-60s60 90 100-30s80-80 120 40s60 20 100-30s80 40 100 60V188H1V100z",
+    "5Y": "M1 80s20-40 60-10s40 60 100-20s30-70 80-15s60 50 100-30s40 80 80-10s60-60 100 20s40 30 80-20s60 20 100 30V188H1V80z"
+  };
+
+  // Spring animations for path morphing
+  const pathSpring = useSpring({
+    d: pathData[selectedPeriod],
+    config: { tension: 300, friction: 30 }
+  });
+
+  const fillSpring = useSpring({
+    d: fillData[selectedPeriod],
+    config: { tension: 300, friction: 30 }
+  });
+
+  // Clip path spring for hover effect
+  const clipPathSpring = useSpring({
+    clipPath: `inset(0px 0px 0px 0px)`,
+    config: { tension: 300, friction: 30 }
+  });
 
   function onPointerMove(e: React.PointerEvent<HTMLDivElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -25,7 +56,7 @@ export default function Graph() {
       (distanceFromRight / rect.width) * 100,
       100,
     );
-    clipPathValue.set(percentageFromRight);
+    clipPathSpring.clipPath.start(`inset(0px ${percentageFromRight}% 0px 0px)`);
   }
 
   return (
@@ -53,7 +84,7 @@ export default function Graph() {
           onPointerLeave={() => {
               setIsHovering(false);
               timeoutRef.current = setTimeout(() => {
-                  clipPathValue.set(0)
+                  clipPathSpring.clipPath.start(`inset(0px 0px 0px 0px)`);
               }, 1000);
           }}
           onPointerEnter={() => {
@@ -70,14 +101,14 @@ export default function Graph() {
           viewBox="0 0 644 188"
           className="absolute inset-0 w-full h-full"
         >
-          <path
+          <animated.path
+            d={pathSpring.d}
             stroke="var(--muted-background)"
             strokeWidth="2"
-            d="M1 118.5s82.308-15.501 113.735-29 74.769-1.713 121.217-12c37.596-8.328 58.517-15.006 93.781-30.5 80.146-35.215 123.213-16 154.141-24.5S635.97.849 644 1.5"
           />
-          <path
+          <animated.path
+            d={fillSpring.d}
             fill="url(#paint0_linear_gray)"
-            d="M113.912 89.012C82.437 102.511 1 118.01 1 118.01V188h643V1.023c-8.043-.65-129.399 12.499-160.375 20.998-30.976 8.498-74.11-10.714-154.38 24.496-35.319 15.493-56.272 22.17-93.927 30.497-46.52 10.286-89.93-1.5-121.406 11.998"
           />
           <defs>
             <linearGradient
@@ -95,23 +126,23 @@ export default function Graph() {
         </svg>
         
         {/* Interactive SVG - with clip-path */}
-        <motion.svg
+        <animated.svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 644 188"
           style={{
-            clipPath: clipPathTemplate,
+            clipPath: clipPathSpring.clipPath,
           }}
           className="absolute inset-0 w-full h-full"
         >
-          <path
+          <animated.path
+            d={pathSpring.d}
             stroke="#7110C5"
             strokeWidth="2"
-            d="M1 118.5s82.308-15.501 113.735-29 74.769-1.713 121.217-12c37.596-8.328 58.517-15.006 93.781-30.5 80.146-35.215 123.213-16 154.141-24.5S635.97.849 644 1.5"
           />
-          <path
+          <animated.path
+            d={fillSpring.d}
             fill="url(#paint0_linear_540_31)"
-            d="M113.912 89.012C82.437 102.511 1 118.01 1 118.01V188h643V1.023c-8.043-.65-129.399 12.499-160.375 20.998-30.976 8.498-74.11-10.714-154.38 24.496-35.319 15.493-56.272 22.17-93.927 30.497-46.52 10.286-89.93-1.5-121.406 11.998"
           />
           <defs>
             <linearGradient
@@ -126,8 +157,29 @@ export default function Graph() {
               <stop offset="1" stopColor="#7110C5" stopOpacity="0"></stop>
             </linearGradient>
           </defs>
-        </motion.svg>
+        </animated.svg>
       </div>
+      
+      {/* Time Period Tabs */}
+      <div className="flex justify-center mt-4 pb-4">
+        <div className="flex bg-[var(--muted-background)] rounded-lg p-1">
+          {timePeriods.map((period) => (
+            <button
+              key={period}
+              onClick={() => setSelectedPeriod(period)}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+                selectedPeriod === period
+                  ? "bg-[var(--primary-foreground)] text-[var(--primary-background)] shadow-sm"
+                  : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+              }`}
+            >
+              {period}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      
     </div>
   );
 }

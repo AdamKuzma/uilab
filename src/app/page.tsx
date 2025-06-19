@@ -9,6 +9,7 @@ import SmoothTabs from "@/components/SmoothTabs";
 import SmoothList from "@/components/SmoothList";
 import MultistepForm from "@/components/MultistepForm";
 import TrashAnimation from "@/components/TrashAnimation";
+import InteractiveGraph from "@/components/InteractiveGraph";
 import { useTheme } from "@/context/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback, useRef } from "react";
@@ -103,6 +104,20 @@ const components = [
     title: "Trash Animation",
     description: "A trash animation component with smooth transitions between steps.",
     component: <TrashAnimation />,
+    preview: (
+      <div className="space-y-1">
+        <div className="h-3 w-12 bg-gray-200 rounded" />
+        <div className="h-3 w-16 bg-gray-200 rounded" />
+        <div className="h-3 w-10 bg-gray-200 rounded" />
+      </div>
+    ),
+    tags: ["react", "framer motion", "tailwind"],
+  },
+  {
+    id: "interactive-graph",
+    title: "Interactive Graph",
+    description: "",
+    component: <InteractiveGraph />,
     preview: (
       <div className="space-y-1">
         <div className="h-3 w-12 bg-gray-200 rounded" />

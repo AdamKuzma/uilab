@@ -130,10 +130,21 @@ const components = [
 ];
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
   const centerRef = useRef<HTMLDivElement>(null);
+
+  // Initialize the current index from localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('currentComponentIndex');
+      const index = saved ? parseInt(saved, 10) : 0;
+      setCurrentIndex(index);
+    }
+    setIsLoading(false);
+  }, []);
 
   const handleWheel = useCallback((e: WheelEvent) => {
     if (isScrolling) return;
@@ -150,6 +161,8 @@ export default function Home() {
     }
     if (nextIndex !== currentIndex) {
       setCurrentIndex(nextIndex);
+      // Save the current index to localStorage
+      localStorage.setItem('currentComponentIndex', nextIndex.toString());
     }
 
     setTimeout(() => {
@@ -168,11 +181,13 @@ export default function Home() {
     if (index === currentIndex) return;
     setDirection(index > currentIndex ? 1 : -1);
     setCurrentIndex(index);
+    // Save the current index to localStorage
+    localStorage.setItem('currentComponentIndex', index.toString());
   };
 
   const currentComponent = components[currentIndex] || components[0];
 
-  if (!currentComponent) {
+  if (!currentComponent || isLoading) {
     return null; // Or some error state
   }
 
@@ -207,7 +222,7 @@ export default function Home() {
       <div className="container-main pr-0" style={{ paddingRight: 256 }}>
         <div className="flex h-[calc(100vh-160px)]">
           {/* Left Column - Component Info */}
-          <div className="w-[256px] bg-background border border-border rounded-xl flex flex-col justify-between overflow-hidden">
+          <div className="w-[256px] mr-4 bg-background border border-border rounded-xl flex flex-col justify-between overflow-hidden">
             <div className="h-full">
               <div className="flex items-center justify-between mb-6 border-b border-border p-4">
                 <span className="text-sm font-medium">{components.length} Components</span>

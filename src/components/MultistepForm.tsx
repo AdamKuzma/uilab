@@ -14,8 +14,8 @@ export default function MultiStepComponent() {
       case 0:
         return (
           <>
-            <h2 className="heading">This is step one</h2>
-            <p>
+            <h2 className="heading text-md font-medium">This is step one</h2>
+            <p className="text-sm text-[var(--muted-foreground)]">
               Usually in this step we would explain why this thing exists and
               what it does. Also, we would show a button to go to the next step.
             </p>
@@ -30,8 +30,8 @@ export default function MultiStepComponent() {
       case 1:
         return (
           <>
-            <h2 className="heading">This is step two</h2>
-            <p>
+            <h2 className="heading text-md font-medium">This is step two</h2>
+            <p className="text-sm text-[var(--muted-foreground)]">
               Usually in this step we would explain why this thing exists and
               what it does. Also, we would show a button to go to the next step.
             </p>
@@ -45,8 +45,8 @@ export default function MultiStepComponent() {
       case 2:
         return (
           <>
-            <h2 className="heading">This is step three</h2>
-            <p>
+            <h2 className="heading text-md font-medium">This is step three</h2>
+            <p className="text-sm text-[var(--muted-foreground)]">
               Usually in this step we would explain why this thing exists and
               what it does. Also, we would show a button to go to the next step.
             </p>

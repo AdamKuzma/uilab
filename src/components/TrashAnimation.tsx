@@ -122,10 +122,10 @@ export default function TrashAnimation() {
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               exit={{ opacity: 0, y: 15, filter: "blur(4px)" }}
               transition={{ duration: 0.3, type: "spring", bounce: 0 }}
-              className="absolute bottom-8 flex gap-1 rounded-xl p-1 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0px_8px_8px_-8px_rgba(0,0,0,0.16)] will-change-transform"
+              className="absolute bottom-8 flex gap-1 rounded-xl p-1 bg-[var(--popover)] shadow-[0_0_0_1px_rgba(0,0,0,0.08),0px_8px_8px_-8px_rgba(0,0,0,0.16)] will-change-transform"
             >
               <div className="flex w-full justify-between gap-1">
-                <button className="flex w-12 flex-col items-center gap-[1px] rounded-lg bg-[#F9F9F8] pb-1 pt-[6px] text-[10px] font-medium text-[#8D8D86]">
+                <button className="flex w-12 flex-col items-center gap-[1px] rounded-lg bg-[var(--popover)] pb-1 pt-[6px] text-[10px] font-medium text-[#8D8D86]">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 flex-shrink-0" viewBox="0 0 24 24" fill="none">
                     <path
                       fillRule="evenodd"
@@ -144,7 +144,7 @@ export default function TrashAnimation() {
                       setReadyToRemove(true);
                     }
                   }}
-                  className="flex w-12 flex-col items-center gap-[1px] rounded-lg bg-[#F9F9F8] pb-1 pt-[6px] text-[10px] font-medium text-[#8D8D86] hover:bg-[#FFF7F7] hover:text-[#E5484D]"
+                  className="flex w-12 flex-col items-center gap-[1px] rounded-lg bg-[var(--popover)] pb-1 pt-[6px] text-[10px] font-medium text-[#8D8D86] hover:bg-[#FFF7F7] hover:text-[#E5484D]"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className="h-4 w-4 flex-shrink-0">
                     <path
@@ -156,7 +156,7 @@ export default function TrashAnimation() {
                   </svg>
                   Trash
                 </button>
-                <button className="flex w-12 flex-col items-center gap-[1px] rounded-lg bg-[#F9F9F8] pb-1 pt-[6px] text-[10px] font-medium text-[#8D8D86]">
+                <button className="flex w-12 flex-col items-center gap-[1px] rounded-lg bg-[var(--popover)] pb-1 pt-[6px] text-[10px] font-medium text-[#8D8D86]">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none">
                     <path
                       fillRule="evenodd"

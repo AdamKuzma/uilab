@@ -61,12 +61,9 @@ export default function SmoothList() {
                       <motion.p 
                         className="game-description" 
                         layoutId={`description-${activeGame.title}`}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.1 }}
                       >
-                        {activeGame.description}</motion.p>
+                        {activeGame.description}
+                      </motion.p>
                     </div>
                     <motion.button className="button" layoutId={`button-${activeGame.title}`}>Get</motion.button>
                   </div>
@@ -77,32 +74,34 @@ export default function SmoothList() {
           </>
         ) : null}
       </AnimatePresence>
-      <ul className="list">
-        {GAMES.map((game) => (
-          <motion.li
-            layoutId={`game-${game.title}`}
-            key={game.title}
-            onClick={() => setActiveGame(game)}
-            style={{ borderRadius: 8 }}
-          >
-            <motion.img
-              layoutId={`image-${game.title}`}
-              height={56}
-              width={56}
-              alt=""
-              src={game.image}
-              style={{ borderRadius: 12 }}
-            />
-            <div className="game-wrapper">
-              <div className="content-wrapper">
-                <motion.h2 className="game-title" layoutId={`title-${game.title}`}>{game.title}</motion.h2>
-                <motion.p className="game-description" layoutId={`description-${game.title}`}>{game.description}</motion.p>
+      <div className="flex justify-center">
+        <ul className="list bg-[var(--primary-foreground)] border-1 border-[var(--border)] rounded-xl">
+          {GAMES.map((game) => (
+            <motion.li
+              layoutId={`game-${game.title}`}
+              key={game.title}
+              onClick={() => setActiveGame(game)}
+              style={{ borderRadius: 8 }}
+            >
+              <motion.img
+                layoutId={`image-${game.title}`}
+                height={56}
+                width={56}
+                alt=""
+                src={game.image}
+                style={{ borderRadius: 12 }}
+              />
+              <div className="game-wrapper">
+                <div className="content-wrapper">
+                  <motion.h2 className="game-title" layoutId={`title-${game.title}`}>{game.title}</motion.h2>
+                  <motion.p className="game-description" layoutId={`description-${game.title}`}>{game.description}</motion.p>
+                </div>
+                <motion.button className="button" layoutId={`button-${game.title}`}>Get</motion.button>
               </div>
-              <motion.button className="button" layoutId={`button-${game.title}`}>Get</motion.button>
-            </div>
-          </motion.li>
-        ))}
-      </ul>
+            </motion.li>
+          ))}
+        </ul>
+      </div>
     </>
   );
 }

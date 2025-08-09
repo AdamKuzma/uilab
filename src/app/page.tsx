@@ -12,7 +12,6 @@ import MultistepForm from "@/components/MultistepForm";
 import TrashAnimation from "@/components/TrashAnimation";
 import InteractiveGraph from "@/components/InteractiveGraph";
 import LineMinimap from "@/components/line-minimap/source";
-import LineMomentum from "@/components/line-momentum/source";
 import { useTheme } from "@/context/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback, useRef } from "react";
@@ -137,14 +136,6 @@ const components = [
     component: <LineMinimap />,
     preview: <LineMinimap />,
     tags: ["react", "framer motion", "scroll"],
-  },
-  {
-    id: "line-momentum",
-    title: "Line Momentum", 
-    description: "A momentum-based interactive line component with proximity scaling.",
-    component: <LineMomentum />,
-    preview: <LineMomentum />,
-    tags: ["react", "framer motion", "momentum"],
   }
 ];
 

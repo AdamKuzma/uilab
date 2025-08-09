@@ -1,5 +1,6 @@
+import { useSpring, useMotionTemplate, motion } from "framer-motion";
 import { useRef, useState } from "react";
-import { useSpring, animated } from "@react-spring/web";
+import { useSpring as useReactSpring, animated } from "@react-spring/web";
 
 const SPRING = {
     damping: 20,
@@ -14,39 +15,34 @@ export default function Graph() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [isHovering, setIsHovering] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState<"1D" | "1M" | "1Y" | "5Y">("1M");
-  
+  const clipPathValue = useSpring(0, isHovering ? SPRING : SLOW_SPRING);
+  const clipPathTemplate = useMotionTemplate`inset(0px ${clipPathValue}% 0px 0px)`;
   const timePeriods = ["1D", "1M", "1Y", "5Y"] as const;
 
-  // Different path data for each time period
+  // Different path data for each time period - all with same structure
   const pathData = {
-    "1D": "M1 110s30-20 60-10s40 30 80-5s20-40 60-15s40 25 80-10s30-35 60-5s40 20 80-15s30-25 60-10s40 15 80-5",
-    "1M": "M1 120s50-40 100-20s80 60 120 10s60-80 100-30s80 50 120-40s60 70 100-20s80-60 120 30s60 40 100-50s80 20 100 40",
-    "1Y": "M1 100s30-60 80-20s60 80 120-10s40-90 100-20s80 70 120-60s60 90 100-30s80-80 120 40s60 20 100-30s80 40 100 60",
-    "5Y": "M1 80s20-40 60-10s40 60 100-20s30-70 80-15s60 50 100-30s40 80 80-10s60-60 100 20s40 30 80-20s60 20 100 30"
+    "1D": "M1 120 s 40 10 80 -25 s 40 -10 80 5 s 40 -50 80 -30 s 40 20 80 10 s 40 -30 80 -15 s 40 50 80 20 s 40 -60 80 -40 s 43 -10 83 -5",
+    "1M": "M1 90 s 40 -100 80 0 s 40 50 80 -10 s 40 -70 80 -20 s 40 60 80 40 s 40 -50 80 -30 s 40 60 80 20 s 40 -30 80 -20 s 43 20 83 90",
+    "1Y": "M1 130 s 40 -50 80 -60 s 40 20 80 20 s 40 -100 80 -80 s 40 90 80 60 s 40 -80 80 -70 s 40 90 80 50 s 40 -70 80 -60 s 43 80 83 40",
+    "5Y": "M1 140 s 40 -10 80 -30 s 40 10 80 45 s 40 -10 80 -45 s 40 40 80 -25 s 40 50 80 -15 s 40 -50 80 -15 s 40 -10 80 -15 s 43 -30 83 -45"
   };
 
   const fillData = {
-    "1D": "M1 110s30-20 60-10s40 30 80-5s20-40 60-15s40 25 80-10s30-35 60-5s40 20 80-15s30-25 60-10s40 15 80-5V188H1V110z",
-    "1M": "M1 120s50-40 100-20s80 60 120 10s60-80 100-30s80 50 120-40s60 70 100-20s80-60 120 30s60 40 100-50s80 20 100 40V188H1V120z",
-    "1Y": "M1 100s30-60 80-20s60 80 120-10s40-90 100-20s80 70 120-60s60 90 100-30s80-80 120 40s60 20 100-30s80 40 100 60V188H1V100z",
-    "5Y": "M1 80s20-40 60-10s40 60 100-20s30-70 80-15s60 50 100-30s40 80 80-10s60-60 100 20s40 30 80-20s60 20 100 30V188H1V80z"
+    "1D": "M1 120 s 40 10 80 -25 s 40 -10 80 5 s 40 -50 80 -30 s 40 20 80 10 s 40 -30 80 -15 s 40 50 80 20 s 40 -60 80 -40 s 43 -10 83 -5 V188 H1 Z",
+    "1M": "M1 90 s 40 -100 80 0 s 40 50 80 -10 s 40 -70 80 -20 s 40 60 80 40 s 40 -50 80 -30 s 40 60 80 20 s 40 -30 80 -20 s 43 20 83 90 V188 H1 Z",
+    "1Y": "M1 130 s 40 -50 80 -60 s 40 20 80 20 s 40 -100 80 -80 s 40 90 80 60 s 40 -80 80 -70 s 40 90 80 50 s 40 -70 80 -60 s 43 80 83 40 V188 H1 Z",
+    "5Y": "M1 140 s 40 -10 80 -30 s 40 10 80 45 s 40 -10 80 -45 s 40 40 80 -25 s 40 50 80 -15 s 40 -50 80 -15 s 40 -10 80 -15 s 43 -30 83 -45 V188 H1 Z"
   };
 
-  // Spring animations for path morphing
-  const pathSpring = useSpring({
+  // React-spring animations for smooth path morphing
+  const pathSpring = useReactSpring({
     d: pathData[selectedPeriod],
-    config: { tension: 300, friction: 30 }
+    config: { tension: 200, friction: 40, clamp: true }
   });
 
-  const fillSpring = useSpring({
+  const fillSpring = useReactSpring({
     d: fillData[selectedPeriod],
-    config: { tension: 300, friction: 30 }
-  });
-
-  // Clip path spring for hover effect
-  const clipPathSpring = useSpring({
-    clipPath: `inset(0px 0px 0px 0px)`,
-    config: { tension: 300, friction: 30 }
+    config: { tension: 200, friction: 40, clamp: true }
   });
 
   function onPointerMove(e: React.PointerEvent<HTMLDivElement>) {
@@ -56,7 +52,7 @@ export default function Graph() {
       (distanceFromRight / rect.width) * 100,
       100,
     );
-    clipPathSpring.clipPath.start(`inset(0px ${percentageFromRight}% 0px 0px)`);
+    clipPathValue.set(percentageFromRight);
   }
 
   return (
@@ -84,7 +80,7 @@ export default function Graph() {
           onPointerLeave={() => {
               setIsHovering(false);
               timeoutRef.current = setTimeout(() => {
-                  clipPathSpring.clipPath.start(`inset(0px 0px 0px 0px)`);
+                  clipPathValue.set(0)
               }, 1000);
           }}
           onPointerEnter={() => {
@@ -126,12 +122,12 @@ export default function Graph() {
         </svg>
         
         {/* Interactive SVG - with clip-path */}
-        <animated.svg
+        <motion.svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 644 188"
           style={{
-            clipPath: clipPathSpring.clipPath,
+            clipPath: clipPathTemplate,
           }}
           className="absolute inset-0 w-full h-full"
         >
@@ -157,19 +153,19 @@ export default function Graph() {
               <stop offset="1" stopColor="#7110C5" stopOpacity="0"></stop>
             </linearGradient>
           </defs>
-        </animated.svg>
+        </motion.svg>
       </div>
       
       {/* Time Period Tabs */}
-      <div className="flex justify-center mt-4 pb-4">
-        <div className="flex bg-[var(--muted-background)] rounded-lg p-1">
+      <div className="flex justify-center pb-4">
+        <div className="flex rounded-lg p-1">
           {timePeriods.map((period) => (
             <button
               key={period}
               onClick={() => setSelectedPeriod(period)}
-              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors cursor-pointer ${
                 selectedPeriod === period
-                  ? "bg-[var(--primary-foreground)] text-[var(--primary-background)] shadow-sm"
+                  ? "bg-[var(--secondary-background)] text-[var(--primary-background)]"
                   : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
               }`}
             >

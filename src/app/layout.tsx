@@ -21,7 +21,7 @@ const pixelifySans = Pixelify_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "UI Labolatory",
+  title: "UI Playground",
   description: "A collection of UI components and animations.",
 };
 

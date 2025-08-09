@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams, useRouter } from 'next/navigation';
 // import { TextShimmer } from "@/components/TextShimmer";
 // import Typewriter from "@/components/Typewriter";
 // import { Spinner } from "@/components/Spinner";
@@ -10,6 +11,7 @@ import SmoothList from "@/components/SmoothList";
 import MultistepForm from "@/components/MultistepForm";
 import TrashAnimation from "@/components/TrashAnimation";
 import InteractiveGraph from "@/components/InteractiveGraph";
+import LineMinimap from "@/components/line-minimap/source";
 import { useTheme } from "@/context/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback, useRef } from "react";
@@ -126,15 +128,31 @@ const components = [
       </div>
     ),
     tags: ["react", "framer motion", "tailwind"],
+  },
+  {
+    id: "line-minimap",
+    title: "Line Minimap",
+    description: "An interactive minimap with proximity-based scaling and smooth scroll tracking.",
+    component: <LineMinimap />,
+    preview: <LineMinimap />,
+    tags: ["react", "framer motion", "scroll"],
   }
 ];
 
 export default function Home() {
+  // Move ALL hooks to the top, before any conditional logic
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
   const centerRef = useRef<HTMLDivElement>(null);
+
+  // Now handle the component parameter logic
+  const componentParam = searchParams.get('component');
+  const isPreviewMode = !!componentParam;
+  const previewComponent = components.find(c => c.id === componentParam);
 
   // Initialize the current index from localStorage
   useEffect(() => {
@@ -189,6 +207,38 @@ export default function Home() {
 
   if (!currentComponent || isLoading) {
     return null; // Or some error state
+  }
+
+  // AFTER all hooks are called, then do conditional rendering
+  if (isPreviewMode && previewComponent) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col">
+        <header className="w-full z-10 relative">
+          <div className="container-main py-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <ThemeToggle />
+                <h1 className="logo">UI Playground</h1>
+              </div>
+              <div className="flex items-center gap-4">
+                <button 
+                  onClick={() => router.push('/')}
+                  className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                  </svg>
+                  Back to Playground
+                </button>
+              </div>
+            </div>
+          </div>
+        </header>
+        <main className="flex-1 flex items-center justify-center p-8 bg-background" style={{ backgroundImage: 'none' }}>
+          {previewComponent.component}
+        </main>
+      </div>
+    );
   }
 
   const variants = {
@@ -251,6 +301,15 @@ export default function Home() {
                     </span>
                   ))}
                 </div>
+                <a 
+                  href={`/?component=${currentComponent.id}`}
+                  className="inline-flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 transition-colors"
+                >
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                  Open in preview
+                </a>
               </div>
             </div>
             <div className="border-t border-[var(--border)] px-4 py-2 flex items-center justify-between bg-[var(--secondary-background)]">

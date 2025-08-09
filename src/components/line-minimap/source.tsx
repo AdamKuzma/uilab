@@ -4,6 +4,8 @@ import { motion, useSpring, useMotionValueEvent, MotionValue, useMotionValue } f
 import * as React from "react";
 import "./system.css";
 
+// Configuration constants
+
 export const LINE_GAP = 9;
 export const LINE_WIDTH = 1;
 export const LINE_COUNT = 40;
@@ -11,13 +13,9 @@ export const LINE_HEIGHT = 50;
 export const LINE_HEIGHT_ACTIVE = 65;
 
 // Transformer constants
-export const DEFAULT_INTENSITY = 7;
+export const DEFAULT_INTENSITY = 4;
 export const DISTANCE_LIMIT = 48;
 
-// Utility functions
-export function clamp(val: number, [min, max]: [number, number]): number {
-  return Math.min(Math.max(val, min), max);
-}
 
 export default function LineMinimap() {
   const { mouseX, onMouseMove, onMouseLeave } = useMouseX();
@@ -67,7 +65,7 @@ function Line({
       style={{
         width: LINE_WIDTH,
         height: active ? LINE_HEIGHT_ACTIVE : LINE_HEIGHT,
-        backgroundColor: active ? 'var(--color-gray10)' : 'var(--color-gray8)',
+        backgroundColor: active ? 'var(--color-gray11)' : 'var(--color-gray8)',
         scaleY,
       }}
       transition={{
@@ -78,6 +76,8 @@ function Line({
     />
   );
 }
+
+// Core functions
 
 export function transformScale(
   distance: number,

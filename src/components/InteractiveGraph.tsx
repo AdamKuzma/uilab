@@ -1,4 +1,4 @@
-import { useSpring, useMotionTemplate, motion, useMotionValueEvent } from "framer-motion";
+import { useSpring, useMotionTemplate, motion, useMotionValueEvent, MotionValue } from "framer-motion";
 import { useRef, useState } from "react";
 import { useSpring as useReactSpring, animated } from "@react-spring/web";
 
@@ -152,7 +152,7 @@ export default function Graph() {
           className="absolute inset-0 w-full h-full"
         >
           <animated.path
-            ref={pathRef as any}
+            ref={pathRef}
             d={pathSpring.d}
             stroke="#7110C5"
             strokeWidth="2"
@@ -229,7 +229,7 @@ function getYAtXOnPath(path: SVGPathElement, x: number): number | null {
     // Binary search over path length to find point with matching x
     let start = 0;
     let end = total;
-    let targetX = x;
+    const targetX = x;
     let bestY = null as number | null;
     for (let i = 0; i < 25; i++) {
       const mid = (start + end) / 2;
@@ -242,12 +242,12 @@ function getYAtXOnPath(path: SVGPathElement, x: number): number | null {
       bestY = pt.y;
     }
     return bestY;
-  } catch (_) {
+  } catch (err) {
     return null;
   }
 }
 
-function ValueAtCursor({ pathRef, cursorX, onValue }: { pathRef: React.RefObject<SVGPathElement | null>, cursorX: any, onValue?: (v: number) => void }) {
+function ValueAtCursor({ pathRef, cursorX, onValue }: { pathRef: React.RefObject<SVGPathElement | null>, cursorX: MotionValue<number>, onValue?: (v: number) => void }) {
   const [text, setText] = useState<string>("");
   const rafRef = useRef<number | null>(null);
   const latestX = useRef<number>(0);
@@ -276,7 +276,7 @@ function ValueAtCursor({ pathRef, cursorX, onValue }: { pathRef: React.RefObject
   return <span>{text}</span>;
 }
 
-function DateAtCursor({ cursorX, containerRef }: { cursorX: any, containerRef: React.RefObject<HTMLDivElement | null> }) {
+function DateAtCursor({ cursorX, containerRef }: { cursorX: MotionValue<number>, containerRef: React.RefObject<HTMLDivElement | null> }) {
   const [text, setText] = useState<string>("");
   const rafRef = useRef<number | null>(null);
   const latestX = useRef<number>(0);

@@ -31,7 +31,6 @@ export default function LineMinimap() {
         {[...Array(LINE_COUNT)].map((_, i) => (
           <Line
             key={i}
-            index={i}
             mouseX={mouseX}
             active={isActive(i, LINE_COUNT)}
           />
@@ -44,11 +43,9 @@ export default function LineMinimap() {
 function Line({
   active,
   mouseX,
-  index,
 }: {
   active?: boolean;
   mouseX: MotionValue<number>;
-  index: number;
 }) {
   const ref = React.useRef<HTMLDivElement>(null);
   const scaleY = useSpring(1, { damping: 45, stiffness: 600 });
@@ -122,7 +119,7 @@ export function useProximity(
     if (!initialValueRef.current) {
       initialValueRef.current = value.get();
     }
-  }, []);
+  }, [value]);
 
   useMotionValueEvent(mouseX, "change", (latest) => {
     if (!ref.current) return;

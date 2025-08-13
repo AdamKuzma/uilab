@@ -14,7 +14,7 @@ import InteractiveGraph from "@/components/InteractiveGraph";
 import LineMinimap from "@/components/line-minimap/source";
 import { useTheme } from "@/context/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 
 // Client-only theme toggle component
 function ThemeToggle() {
@@ -139,7 +139,7 @@ const components = [
   }
 ];
 
-export default function Home() {
+function HomeContent() {
   // Move ALL hooks to the top, before any conditional logic
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -403,5 +403,13 @@ export default function Home() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<main className="min-h-screen" />}>
+      <HomeContent />
+    </Suspense>
   );
 }

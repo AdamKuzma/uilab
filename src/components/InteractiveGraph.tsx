@@ -242,7 +242,7 @@ function getYAtXOnPath(path: SVGPathElement, x: number): number | null {
       bestY = pt.y;
     }
     return bestY;
-  } catch (err) {
+  } catch {
     return null;
   }
 }

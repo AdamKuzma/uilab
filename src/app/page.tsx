@@ -316,10 +316,10 @@ function HomeContent() {
               <button
                 onClick={() => navigateToComponent(Math.max(currentIndex - 1, 0))}
                 disabled={currentIndex === 0}
-                className="p-1 disabled:opacity-30"
+                className="p-1 disabled:opacity-30 hover:bg-[var(--muted-background)] rounded transition-colors cursor-pointer disabled:cursor-default disabled:hover:bg-transparent"
                 aria-label="Previous"
               >
-                <svg className="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-muted-foreground hover:text-foreground transition-colors" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
@@ -329,10 +329,10 @@ function HomeContent() {
               <button
                 onClick={() => navigateToComponent(Math.min(currentIndex + 1, components.length - 1))}
                 disabled={currentIndex === components.length - 1}
-                className="p-1 disabled:opacity-30"
+                className="p-1 disabled:opacity-30 hover:bg-[var(--muted-background)] rounded transition-colors cursor-pointer disabled:cursor-default disabled:hover:bg-transparent"
                 aria-label="Next"
               >
-                <svg className="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-muted-foreground hover:text-foreground transition-colors" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                 </svg>
               </button>

@@ -12,6 +12,7 @@ import MultistepForm from "@/components/MultistepForm";
 import TrashAnimation from "@/components/TrashAnimation";
 import InteractiveGraph from "@/components/InteractiveGraph";
 import LineMinimap from "@/components/line-minimap/source";
+import DictationWaveform from "@/components/dictation-waveform/main";
 import { useTheme } from "@/context/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback, useRef, Suspense } from "react";
@@ -132,10 +133,24 @@ const components = [
   {
     id: "line-minimap",
     title: "Line Minimap",
-    description: "An interactive minimap with proximity-based scaling and smooth scroll tracking.",
+    description: "An interactive minimap with proximity-based scaling and smooth hover tracking.",
     component: <LineMinimap />,
     preview: <LineMinimap />,
-    tags: ["react", "framer motion", "scroll"],
+    tags: ["react", "framer motion", "hover"],
+  },
+  {
+    id: "dictation-waveform",
+    title: "Dictation Waveform",
+    description: "A live microphone waveform visualization with smooth scrolling bars and real-time audio level detection.",
+    component: <DictationWaveform />,
+    preview: (
+      <div className="space-y-1">
+        <div className="h-3 w-12 bg-gray-200 rounded" />
+        <div className="h-3 w-16 bg-gray-200 rounded" />
+        <div className="h-3 w-10 bg-gray-200 rounded" />
+      </div>
+    ),
+    tags: ["react", "canvas", "audio", "microphone"],
   }
 ];
 
@@ -301,7 +316,7 @@ function HomeContent() {
                     </span>
                   ))}
                 </div>
-                <a 
+                {/* <a 
                   href={`/?component=${currentComponent.id}`}
                   className="inline-flex items-center gap-1 text-xs text-foreground hover:opacity-70 transition-opacity"
                 >
@@ -309,7 +324,7 @@ function HomeContent() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
                   Open in preview
-                </a>
+                </a> */}
               </div>
             </div>
             <div className="border-t border-[var(--border)] px-4 py-2 flex items-center justify-between bg-[var(--secondary-background)]">

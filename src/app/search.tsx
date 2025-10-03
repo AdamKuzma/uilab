@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Component } from "@/data/components";
 
 interface SearchProps {
@@ -146,20 +146,29 @@ export default function Search({ components, onComponentSelect, currentIndex }: 
             </div>
           ) : (
             // Show current component info
-            <>
-              <h2 className="text-sm font-semibold">{components[currentIndex]?.title}</h2>
-              <p className="text-sm text-muted-foreground">{components[currentIndex]?.description}</p>
-              <div className="flex flex-wrap gap-2 mt-2">
-                {components[currentIndex]?.tags?.map(tag => (
-                  <span
-                    key={tag}
-                    className="px-2 py-0.5 rounded bg-[var(--muted-background)] text-xs text-muted-foreground font-mono"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, x: 8 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -8 }}
+                transition={{ duration: 0.2 }}
+                className="flex flex-col gap-3 mt-1"
+              >
+                <h2 className="text-sm font-medium">{components[currentIndex]?.title}</h2>
+                <p className="text-sm text-muted-foreground">{components[currentIndex]?.description}</p>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {components[currentIndex]?.tags?.map(tag => (
+                    <span
+                      key={tag}
+                      className="px-2 py-0.5 rounded bg-[var(--muted-background)] text-xs text-muted-foreground font-mono"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            </AnimatePresence>
           )}
         </div>
       </div>

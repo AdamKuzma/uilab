@@ -39,13 +39,7 @@ export const components: Component[] = [
     title: "Smooth List",
     description: "A list component with smooth animations for items.",
     component: <SmoothList />,
-    preview: (
-      <div className="space-y-1">
-        <div className="h-3 w-12 bg-gray-200 rounded" />
-        <div className="h-3 w-16 bg-gray-200 rounded" />
-        <div className="h-3 w-10 bg-gray-200 rounded" />
-      </div>
-    ),
+    preview: <SmoothList />,
     tags: ["react", "framer motion"],
   },
   {
@@ -53,13 +47,7 @@ export const components: Component[] = [
     title: "Feedback Popover",
     description: "A popover component with feedback for user interactions.",
     component: <FeedbackPopover />,
-    preview: (
-      <div className="space-y-1">
-        <div className="h-3 w-12 bg-gray-200 rounded" />
-        <div className="h-3 w-16 bg-gray-200 rounded" />
-        <div className="h-3 w-10 bg-gray-200 rounded" />
-      </div>
-    ),
+    preview: <FeedbackPopover />,
     tags: ["react", "framer motion", "tailwind"],
   },
   {
@@ -67,13 +55,7 @@ export const components: Component[] = [
     title: "Multistep Form",
     description: "A multistep form component with smooth transitions between steps.",
     component: <MultistepForm />,
-    preview: (
-      <div className="space-y-1">
-        <div className="h-3 w-12 bg-gray-200 rounded" />
-        <div className="h-3 w-16 bg-gray-200 rounded" />
-        <div className="h-3 w-10 bg-gray-200 rounded" />
-      </div>
-    ),
+    preview: <MultistepForm />,
     tags: ["react", "framer motion", "tailwind"],
   },
   {
@@ -81,13 +63,7 @@ export const components: Component[] = [
     title: "Trash Animation",
     description: "A trash animation component with smooth transitions between steps.",
     component: <TrashAnimation />,
-    preview: (
-      <div className="space-y-1">
-        <div className="h-3 w-12 bg-gray-200 rounded" />
-        <div className="h-3 w-16 bg-gray-200 rounded" />
-        <div className="h-3 w-10 bg-gray-200 rounded" />
-      </div>
-    ),
+    preview: <TrashAnimation />,
     tags: ["react", "framer motion", "tailwind"],
   },
   {
@@ -95,13 +71,7 @@ export const components: Component[] = [
     title: "Interactive Graph",
     description: "",
     component: <InteractiveGraph />,
-    preview: (
-      <div className="space-y-1">
-        <div className="h-3 w-12 bg-gray-200 rounded" />
-        <div className="h-3 w-16 bg-gray-200 rounded" />
-        <div className="h-3 w-10 bg-gray-200 rounded" />
-      </div>
-    ),
+    preview: <InteractiveGraph />,
     tags: ["react", "framer motion", "tailwind"],
   },
   {
@@ -117,13 +87,7 @@ export const components: Component[] = [
     title: "Dictation Waveform",
     description: "A live microphone waveform visualization with smooth scrolling bars and real-time audio level detection.",
     component: <DictationWaveform />,
-    preview: (
-      <div className="space-y-1">
-        <div className="h-3 w-12 bg-gray-200 rounded" />
-        <div className="h-3 w-16 bg-gray-200 rounded" />
-        <div className="h-3 w-10 bg-gray-200 rounded" />
-      </div>
-    ),
+    preview: <DictationWaveform />,
     tags: ["react", "canvas", "audio", "microphone"],
   }
 ];

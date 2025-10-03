@@ -10,7 +10,7 @@ interface RightColumnProps {
 export default function RightColumn({ components, onSelect }: RightColumnProps) {
   return (
     <div
-      className="fixed top-0 right-0 h-screen overflow-y-auto z-20 flex flex-col scrollbar-none hide-scrollbar max-[1000px]:hidden"
+      className="fixed top-0 right-0 h-screen overflow-y-auto z-20 flex flex-col scrollbar-none hide-scrollbar max-[2000px]:hidden"
       style={{ width: 256 }}
     >
       <div className="h-full p-4">

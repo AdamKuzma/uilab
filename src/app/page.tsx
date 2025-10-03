@@ -174,7 +174,7 @@ function HomeContent() {
 
       {/* Main Content */}
       <div className="container-main pr-0">
-         <div className="flex items-stretch h-[calc(100vh-160px)] mr-[226px] max-[1000px]:mr-0">
+         <div className="flex items-stretch h-[calc(100vh-160px)] mr-0">
           {/* Left Column - Search Component (hidden ≤787px) */}
           <div className="h-full max-[787px]:hidden">
             <Search 
@@ -216,7 +216,7 @@ function HomeContent() {
       </div>
 
       {/* Right Column - Fixed, Full Height */}
-      <RightColumn components={components} onSelect={navigateToComponent} />
+      {/* <RightColumn components={components} onSelect={navigateToComponent} /> */}
     </main>
   );
 }

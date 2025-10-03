@@ -16,8 +16,6 @@ export default function SmoothList() {
   const [activeGame, setActiveGame] = useState<Game | null>(null);
   const ref = useRef<HTMLDivElement>(null!);
   useOnClickOutside<HTMLDivElement>(ref, () => setActiveGame(null));
-  const useLayoutIds = !!activeGame; // Avoid layout projection unless detail view is open
-
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
@@ -31,20 +29,28 @@ export default function SmoothList() {
 
   return (
     <>
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {activeGame ? (
-          <>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="overlay" />
-            <div className="active-game">
-              <motion.div 
-                layoutId={useLayoutIds ? `game-${activeGame.title}` : undefined}
-                className="inner" 
-                ref={ref} 
-                style={{ borderRadius: 12 }}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="overlay"
+          />
+        ) : null}
+      </AnimatePresence>
+      <AnimatePresence>
+        {activeGame ? (
+          <div className="active-game">
+            <motion.div
+              layoutId={`card-${activeGame.title}`}
+              className="inner"
+              ref={ref}
+              style={{ borderRadius: 12 }}
               >
                 <div className="header">
                   <motion.img
-                    layoutId={useLayoutIds ? `image-${activeGame.title}` : undefined}
+                    layoutId={`image-${activeGame.title}`}
                     height={56}
                     width={56}
                     alt=""
@@ -53,39 +59,51 @@ export default function SmoothList() {
                   />
                   <div className="header-inner">
                     <div className="content-wrapper">
-                      <motion.h2 
+                      <motion.h2
+                        layoutId={`title-${activeGame.title}`}
                         className="game-title"
-                        layoutId={useLayoutIds ? `title-${activeGame.title}` : undefined}
-                    >
+                      >
                         {activeGame.title}
                       </motion.h2>
-                      <motion.p 
-                        className="game-description" 
-                        layoutId={useLayoutIds ? `description-${activeGame.title}` : undefined}
+                      <motion.p
+                        layoutId={`description-${activeGame.title}`}
+                        className="game-description"
                       >
                         {activeGame.description}
                       </motion.p>
                     </div>
-                    <motion.button className="button" layoutId={useLayoutIds ? `button-${activeGame.title}` : undefined}>Get</motion.button>
+                    <motion.button
+                      layoutId={`button-${activeGame.title}`}
+                      className="button"
+                    >
+                      Get
+                    </motion.button>
                   </div>
                 </div>
-                <p className="long-description">{activeGame.longDescription}</p>
+                <motion.p
+                  layout
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0, transition: { duration: 0.05 } }}
+                  className="long-description"
+                >
+                  {activeGame.longDescription}
+                </motion.p>
               </motion.div>
             </div>
-          </>
         ) : null}
       </AnimatePresence>
       <div className="flex justify-center">
         <ul className="list bg-[var(--primary-foreground)] border-1 border-[var(--border)] rounded-xl">
           {GAMES.map((game) => (
             <motion.li
-              layoutId={useLayoutIds ? `game-${game.title}` : undefined}
+              layoutId={`card-${game.title}`}
               key={game.title}
               onClick={() => setActiveGame(game)}
               style={{ borderRadius: 8 }}
             >
               <motion.img
-                layoutId={useLayoutIds ? `image-${game.title}` : undefined}
+                layoutId={`image-${game.title}`}
                 height={56}
                 width={56}
                 alt=""
@@ -94,10 +112,25 @@ export default function SmoothList() {
               />
               <div className="game-wrapper">
                 <div className="content-wrapper">
-                  <motion.h2 className="game-title" layoutId={useLayoutIds ? `title-${game.title}` : undefined}>{game.title}</motion.h2>
-                  <motion.p className="game-description" layoutId={useLayoutIds ? `description-${game.title}` : undefined}>{game.description}</motion.p>
+                  <motion.h2
+                    layoutId={`title-${game.title}`}
+                    className="game-title"
+                  >
+                    {game.title}
+                  </motion.h2>
+                  <motion.p
+                    layoutId={`description-${game.title}`}
+                    className="game-description"
+                  >
+                    {game.description}
+                  </motion.p>
                 </div>
-                <motion.button className="button" layoutId={useLayoutIds ? `button-${game.title}` : undefined}>Get</motion.button>
+                <motion.button
+                  layoutId={`button-${game.title}`}
+                  className="button"
+                >
+                  Get
+                </motion.button>
               </div>
             </motion.li>
           ))}

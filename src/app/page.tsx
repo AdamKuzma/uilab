@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { components } from "@/data/components";
 import Search from "@/app/search";
-import RightColumn from "@/app/right-column";
 
 // Client-only theme toggle component
 function ThemeToggle() {

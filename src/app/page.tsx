@@ -86,10 +86,7 @@ function HomeContent() {
   }, []);
 
   useEffect(() => {
-    const center = centerRef.current;
-    if (!center) return;
-    center.addEventListener('wheel', handleWheel, { passive: false });
-    return () => center.removeEventListener('wheel', handleWheel);
+    // No-op: wheel handled via React onWheel; keep dependency length stable
   }, [handleWheel]);
 
   const navigateToComponent = (index: number) => {
@@ -114,7 +111,7 @@ function HomeContent() {
           <div className="container-main py-6">
             <div className="flex items-center justify-between">
               <div
-                className="flex items-center cursor-pointer"
+                className="inline-flex items-center cursor-pointer logo-container"
                 onClick={toggleTheme}
                 role="button"
                 aria-label="Toggle theme"
@@ -164,7 +161,7 @@ function HomeContent() {
       <header className="w-full z-10 relative">
         <div className="container-main py-6">
           <div
-            className="flex items-center cursor-pointer"
+            className="inline-flex items-center cursor-pointer"
             onClick={toggleTheme}
             role="button"
             aria-label="Toggle theme"
@@ -188,7 +185,11 @@ function HomeContent() {
           </div>
 
           {/* Center Column - Component Display */}
-          <div ref={centerRef} className="relative overflow-hidden flex-1 flex items-center justify-center">
+          <div
+            ref={centerRef}
+            className="relative overflow-hidden flex-1 flex items-center justify-center"
+            onWheel={(e) => handleWheel(e.nativeEvent)}
+          >
             <AnimatePresence initial={false} custom={direction} mode="sync">
               <motion.div
                 key={currentIndex}

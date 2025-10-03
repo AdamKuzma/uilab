@@ -66,6 +66,7 @@ export default function Search({ components, onComponentSelect, currentIndex }: 
             <div className="flex items-center gap-2 cursor-pointer h-5 w-full">
               <motion.div
                 className="flex flex-col w-full"
+                initial={false}
                 animate={{ y: showInput ? -10 : 16 }}
                 transition={{ duration: 0.2 }}
               >

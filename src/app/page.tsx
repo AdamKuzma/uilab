@@ -83,7 +83,7 @@ function HomeContent() {
       }
       return nextIndex;
     });
-  }, [components.length]);
+  }, []);
 
   useEffect(() => {
     const center = centerRef.current;

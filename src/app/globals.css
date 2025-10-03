@@ -158,9 +158,54 @@
     @apply text-foreground overscroll-none;
     overscroll-behavior: none;
   }
+  /* Utility to freeze child visual changes during parent animation */
+  .disable-animations, .disable-animations * {
+    transition: none !important;
+    animation: none !important;
+  }
+  /* Ensure placeholder color follows theme instantly */
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--foreground) !important;
+  }
+  /* Selection color (covers inputs, textareas, and Firefox) */
+  ::selection,
+  input::selection,
+  textarea::selection {
+    background: #7E1ED2 !important;
+    color: #fff !important;
+  }
+  ::-moz-selection,
+  input::-moz-selection,
+  textarea::-moz-selection {
+    background: #7E1ED2 !important;
+    color: #fff !important;
+  }
+  .dark ::selection,
+  .dark input::selection,
+  .dark textarea::selection {
+    background: #8B2FD9 !important;
+    color: #fff !important;
+  }
+  .dark ::-moz-selection,
+  .dark input::-moz-selection,
+  .dark textarea::-moz-selection {
+    background: #8B2FD9 !important;
+    color: #fff !important;
+  }
 }
 
 @layer utilities {
+  /* Prevent theme toggle from animating right column card backgrounds; keep hover transitions */
+  .right-card {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  }
+  .right-card {
+    transition-duration: 0s;
+  }
+  .right-card:hover {
+    transition-duration: .2s;
+  }
   .container-main {
     width: 100%;
     padding-left: 30px;

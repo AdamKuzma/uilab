@@ -7,6 +7,7 @@ import TrashAnimation from "@/components/TrashAnimation";
 import InteractiveGraph from "@/components/InteractiveGraph";
 import LineMinimap from "@/components/line-minimap/source";
 import DictationWaveform from "@/components/dictation-waveform/main";
+import NestedMenu from "@/components/nested-menu/NestedMenu";
 
 export interface Component {
   id: string;
@@ -89,6 +90,14 @@ export const components: Component[] = [
     component: <DictationWaveform />,
     preview: <DictationWaveform />,
     tags: ["react", "canvas", "audio", "microphone"],
+  },
+  {
+    id: "nested-menu",
+    title: "Nested Menu",
+    description: "A nested menu component with multiple levels",
+    component: <NestedMenu />,
+    preview: <NestedMenu />,
+    tags: ["react", "menu", "navigation"],
   }
 ];
 

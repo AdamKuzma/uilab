@@ -1,11 +1,15 @@
 "use client";
 
-import { FolderIcon, FolderOpenIcon } from "@heroicons/react/24/solid";
+import { FolderIcon } from "@heroicons/react/24/solid";
 
 export default function NestedMenu() {
-    let folders = [
+    const folders = [
         {name: 'Movies', folders: [
-            {name: 'Action'},
+            {name: 'Action', folders: [
+                {name: 'Action 1'},
+                {name: 'Action 2'},
+                {name: 'Action 3'},
+            ]},
             {name: 'Adventure'},
             {name: 'Comedy'},
             {name: 'Drama'},

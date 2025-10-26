@@ -94,7 +94,7 @@ export const components: Component[] = [
   {
     id: "nested-menu",
     title: "Nested Menu",
-    description: "A nested menu component with multiple levels",
+    description: "A recursive nested menu component with multiple levels that renders itself. Created for a client project.",
     component: <NestedMenu />,
     preview: <NestedMenu />,
     tags: ["react", "menu", "navigation"],

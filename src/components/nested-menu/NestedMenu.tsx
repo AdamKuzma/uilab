@@ -3,7 +3,7 @@
 import { FolderIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 
-let folders = [
+const folders = [
     {name: 'Home', folders: [
         {name: 'Movies', folders: [
             {name: 'Action', folders: [
@@ -54,7 +54,7 @@ interface FolderType {
 }
 
 function Folder({ folder }: { folder: FolderType }) {
-    let [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     return (
         <li key={folder.name} className="my-1.5">

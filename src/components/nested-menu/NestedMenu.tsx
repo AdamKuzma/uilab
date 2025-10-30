@@ -1,6 +1,6 @@
 "use client";
 
-import { FolderIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
+import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 // import "./styles.css";
 

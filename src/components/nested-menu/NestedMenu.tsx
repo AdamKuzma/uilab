@@ -2,12 +2,18 @@
 
 import { FolderIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
+// import "./styles.css";
 
-const folders = [
-    {name: 'Home', folders: [
-        {name: 'Movies', folders: [
-            {name: 'Action', folders: [
-                {name: 'Action 1', folders: [
+type Node = {
+    name: string;
+    nodes?: Node[];
+}
+
+const nodes: Node[] = [
+    {name: 'Home', nodes: [
+        {name: 'Movies', nodes: [
+            {name: 'Action', nodes: [
+                {name: 'Action 1', nodes: [
                     {name: 'Popular'},
                     {name: 'Favorites'},
                     {name: 'Top Rated'},
@@ -16,7 +22,7 @@ const folders = [
                 {name: 'Action 3'},
             ]},
             {name: 'Adventure'},
-            {name: 'Comedy', folders: [
+            {name: 'Comedy', nodes: [
                 {name: 'Comedy 1'},
                 {name: 'Comedy 2'},
                 {name: 'Comedy 3'},
@@ -24,7 +30,7 @@ const folders = [
             {name: 'Drama'},
             {name: 'Fantasy'},
         ]}, 
-        {name: 'Music', folders: [
+        {name: 'Music', nodes: [
             {name: 'Rock'},
             {name: 'Pop'},
             {name: 'Jazz'},
@@ -38,39 +44,34 @@ const folders = [
 
 export default function NestedMenu() {
     return (
-        <div className="p-8 max-w-sm w-[300px] h-[600px] overflow-y-auto ml-0">
+        <div className="shadow-[0_2px_5px_-2px_rgba(0,0,0,0.0.08)] bg-[var(--color-gray1)] border border-[var(--color-gray5)] rounded-xl px-3 py-2 max-w-sm w-[260px] h-[500px] overflow-y-auto my-0 mx-auto">
             <ul>
-                {folders.map((folder) => (
-                    <Folder key={folder.name} folder={folder} />
+                {nodes.map((node) => (
+                    <FilesystemItem key={node.name} node={node} />
                 ))}                   
             </ul>
         </div>
     );
 }
 
-interface FolderType {
-    name: string;
-    folders?: FolderType[];
-}
-
-function Folder({ folder }: { folder: FolderType }) {
+function FilesystemItem({ node }: { node: Node }) {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <li key={folder.name} className="my-1.5">
-                <span className="flex items-center gap-1.5">
-                    {folder.folders && folder.folders.length > 0 && (
-                        <button onClick={() => setIsOpen(!isOpen)}>
-                            <ChevronRightIcon className={`size-3 text-gray-600 ${isOpen ? 'rotate-90' : ''}`}/>
+        <li key={node.name} className="my-1.5">
+                <span className="group flex items-center justify-between gap-1.5 cursor-pointer transition duration-200 hover:bg-[var(--color-gray3)] rounded-md pl-2 pr-0.5 py-0.5">
+                    {/* <FolderIcon key={node.name} className={`size-6 text-sky-500 ${!node.nodes || node.nodes.length === 0 ? 'ml-[18px]' : ''}`}/> */}
+                    <span className="text-[15px] text-[var(--color-gray12)]">{node.name}</span>
+                    {node.nodes && node.nodes.length > 0 && (
+                        <button className="p-1 transition duration-200 cursor-pointer hover:bg-[var(--color-gray5)] rounded-sm" onClick={() => setIsOpen(!isOpen)}>
+                            <ChevronRightIcon className={`size-3.5 text-[var(--color-gray9)] opacity-0 group-hover:opacity-100 transition-opacity ${isOpen ? 'rotate-90' : ''}`}/>
                         </button>
                     )}
-                    <FolderIcon key={folder.name} className={`size-6 text-sky-500 ${!folder.folders || folder.folders.length === 0 ? 'ml-[18px]' : ''}`}/>
-                    {folder.name}
                 </span>
             {isOpen && (
-                <ul className="pl-6">
-                    {folder.folders?.map(folder => (
-                        <Folder key={folder.name} folder={folder} />
+                <ul className="pl-4">
+                    {node.nodes?.map(node => (
+                        <FilesystemItem key={node.name} node={node} />
                     ))}
                 </ul>
             )}

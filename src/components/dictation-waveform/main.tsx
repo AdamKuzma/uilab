@@ -105,9 +105,10 @@ export default function DictationWaveform() {
 
   // Cleanup on unmount
   useEffect(() => {
+    const audioContext = audioContextRef.current;
     return () => {
-      if (audioContextRef.current) {
-        audioContextRef.current.close();
+      if (audioContext) {
+        audioContext.close();
       }
     };
   }, []);
@@ -317,7 +318,7 @@ export default function DictationWaveform() {
       audioCtxRef.current?.close().catch(() => {});
       mediaStreamRef.current?.getTracks().forEach(t => t.stop());
     };
-  }, [isRecording, isTranscribing]);
+  }, [isRecording, isTranscribing, draw]);
 
 
   function readLevel(): number {

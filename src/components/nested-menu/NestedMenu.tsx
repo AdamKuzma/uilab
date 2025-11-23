@@ -100,7 +100,6 @@ const nodes: Node[] = [
 
 export default function NestedMenu() {
     const [items, setItems] = useState(nodes);
-    const [activeId, setActiveId] = useState<string | null>(null);
     const [activeNode, setActiveNode] = useState<Node | null>(null);
     const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
 
@@ -140,7 +139,6 @@ export default function NestedMenu() {
 
     const handleDragStart = (event: DragStartEvent) => {
         const { active } = event;
-        setActiveId(active.id as string);
         const node = findNodeById(items, active.id as string);
         setActiveNode(node);
     };
@@ -167,7 +165,6 @@ export default function NestedMenu() {
             });
         }
         
-        setActiveId(null);
         setActiveNode(null);
     };
 

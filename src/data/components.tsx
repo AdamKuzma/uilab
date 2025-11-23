@@ -8,6 +8,7 @@ import InteractiveGraph from "@/components/InteractiveGraph";
 import LineMinimap from "@/components/line-minimap/source";
 import DictationWaveform from "@/components/dictation-waveform/main";
 import NestedMenu from "@/components/nested-menu/NestedMenu";
+import LiquidGlass from "@/components/liquid-glass/liquid-glass";
 
 export interface Component {
   id: string;
@@ -83,14 +84,14 @@ export const components: Component[] = [
     preview: <LineMinimap />,
     tags: ["react", "framer motion", "hover"],
   },
-  {
-    id: "dictation-waveform",
-    title: "Dictation Waveform",
-    description: "A live microphone waveform visualization with smooth scrolling bars and real-time audio level detection.",
-    component: <DictationWaveform />,
-    preview: <DictationWaveform />,
-    tags: ["react", "canvas", "audio", "microphone"],
-  },
+  // {
+  //   id: "dictation-waveform",
+  //   title: "Dictation Waveform",
+  //   description: "A live microphone waveform visualization with smooth scrolling bars and real-time audio level detection.",
+  //   component: <DictationWaveform />,
+  //   preview: <DictationWaveform />,
+  //   tags: ["react", "canvas", "audio", "microphone"],
+  // },
   {
     id: "nested-menu",
     title: "Nested Menu",
@@ -98,6 +99,14 @@ export const components: Component[] = [
     component: <NestedMenu />,
     preview: <NestedMenu />,
     tags: ["react", "menu", "navigation"],
-  }
+  },
+  // {
+  //   id: "liquid-glass",
+  //   title: "Liquid Glass",
+  //   description: "A liquid glass component with smooth transitions and hover effects.",
+  //   component: <LiquidGlass />,
+  //   preview: <LiquidGlass />,
+  //   tags: ["react", "glass", "hover"],
+  // }
 ];
 

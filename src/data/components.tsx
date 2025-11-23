@@ -6,9 +6,9 @@ import MultistepForm from "@/components/MultistepForm";
 import TrashAnimation from "@/components/TrashAnimation";
 import InteractiveGraph from "@/components/InteractiveGraph";
 import LineMinimap from "@/components/line-minimap/source";
-import DictationWaveform from "@/components/dictation-waveform/main";
+//import DictationWaveform from "@/components/dictation-waveform/main";
 import NestedMenu from "@/components/nested-menu/NestedMenu";
-import LiquidGlass from "@/components/liquid-glass/liquid-glass";
+//import LiquidGlass from "@/components/liquid-glass/liquid-glass";
 
 export interface Component {
   id: string;

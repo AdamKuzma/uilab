@@ -102,6 +102,7 @@ const Typewriter = ({
     isDeleting,
     speed,
     deleteSpeed,
+    initialDelay,
     waitTime,
     texts,
     currentTextIndex,

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 // Inline SVG components
 const MicLightIcon = () => (
@@ -269,58 +269,7 @@ export default function DictationWaveform() {
     };
   }, []);
 
-
-  // Start waveform audio + render loop only when recording
-  useEffect(() => {
-    if (!isRecording) return;
-
-    let stopped = false;
-    const start = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        mediaStreamRef.current = stream;
-
-        const ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
-        audioCtxRef.current = ctx;
-
-        const source = ctx.createMediaStreamSource(stream);
-        sourceRef.current = source;
-
-        const analyser = ctx.createAnalyser();
-        analyser.fftSize = 1024; // small for low latency level reads
-        analyser.smoothingTimeConstant = 0.0; // we do our own smoothing
-        analyserRef.current = analyser;
-
-        source.connect(analyser);
-
-        setReady(true);
-        renderLoop();
-      } catch (e: unknown) {
-        setError((e as Error)?.message || "Microphone permission denied");
-      }
-    };
-
-    start();
-
-    const renderLoop = () => {
-      if (stopped) return;
-      rafRef.current = requestAnimationFrame(renderLoop);
-      if (!isTranscribing) {
-        draw();
-      }
-    };
-
-    return () => {
-      stopped = true;
-      cancelAnimationFrame(rafRef.current!);
-      try { sourceRef.current?.disconnect(); } catch { /* ignore */ }
-      try { analyserRef.current?.disconnect(); } catch { /* ignore */ }
-      audioCtxRef.current?.close().catch(() => {});
-      mediaStreamRef.current?.getTracks().forEach(t => t.stop());
-    };
-  }, [isRecording, isTranscribing, draw]);
-
-
+  // Helper functions
   function readLevel(): number {
     const analyser = analyserRef.current;
     if (!analyser) return 0;
@@ -352,7 +301,7 @@ export default function DictationWaveform() {
     initialBars[initialBars.length - 1] = false; // New bar is from live audio
   }
 
-  function draw() {
+  const draw = useCallback(() => {
     const canvas = canvasRef.current;
     const bars = barsRef.current;
     const initialBars = initialBarsRef.current;
@@ -408,7 +357,7 @@ export default function DictationWaveform() {
       xRight -= (barW + gapW);
       if (xRight < -barW) break; // done if off screen
     }
-  }
+  }, [effectiveWidth, dpr, height, speedPxPerSec, totalBarPitch, bg, barWidth, gap, inactiveBarColor, barColor]);
 
   function roundRect(
     ctx: CanvasRenderingContext2D,
@@ -428,6 +377,56 @@ export default function DictationWaveform() {
     ctx.closePath();
     ctx.fill();
   }
+
+  // Start waveform audio + render loop only when recording
+  useEffect(() => {
+    if (!isRecording) return;
+
+    let stopped = false;
+    const start = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaStreamRef.current = stream;
+
+        const ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+        audioCtxRef.current = ctx;
+
+        const source = ctx.createMediaStreamSource(stream);
+        sourceRef.current = source;
+
+        const analyser = ctx.createAnalyser();
+        analyser.fftSize = 1024; // small for low latency level reads
+        analyser.smoothingTimeConstant = 0.0; // we do our own smoothing
+        analyserRef.current = analyser;
+
+        source.connect(analyser);
+
+        setReady(true);
+        renderLoop();
+      } catch (e: unknown) {
+        setError((e as Error)?.message || "Microphone permission denied");
+      }
+    };
+
+    start();
+
+    const renderLoop = () => {
+      if (stopped) return;
+      rafRef.current = requestAnimationFrame(renderLoop);
+      if (!isTranscribing) {
+        draw();
+      }
+    };
+
+    return () => {
+      stopped = true;
+      cancelAnimationFrame(rafRef.current!);
+      try { sourceRef.current?.disconnect(); } catch { /* ignore */ }
+      try { analyserRef.current?.disconnect(); } catch { /* ignore */ }
+      audioCtxRef.current?.close().catch(() => {});
+      mediaStreamRef.current?.getTracks().forEach(t => t.stop());
+    };
+  }, [isRecording, isTranscribing, draw]);
 
   return (
     <div className="w-full max-w-2xl mx-auto p-8">

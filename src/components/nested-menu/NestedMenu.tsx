@@ -8,6 +8,7 @@ import InboxIcon from "./assets/inbox.svg";
 import JournalIcon from "./assets/journal.svg";
 import ChevronIcon from "./assets/chevron-right.svg";
 
+import { Avatar } from "@/components/fallback-avatar/FallbackAvatar";
 import { DndContext, closestCenter, DragEndEvent, DragOverlay, DragStartEvent } from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
@@ -170,9 +171,12 @@ export default function NestedMenu() {
 
     return (
         <div className="w-[260px] h-[420px] bg-[var(--color-gray1)] border border-[var(--color-gray6)] overflow-x-hidden overscroll-y-contain rounded-xl py-2 max-w-sm overflow-y-auto my-0 mx-auto shadow-[0_2px_5px_-2px_rgba(0,0,0,0.0.08)]" onWheel={(e) => e.stopPropagation()}>
-            <div className="px-4.5 pt-2.5 pb-4 mb-3 border-b border-[var(--color-gray6)]">
-                <p className="text-[var(--color-gray12)] text-sm font-medium mb-[-2px]">Adam Kuzma</p>
-                <span className="text-[var(--color-gray11)] text-sm">menu@component.com</span>
+            <div className="px-4.5 pt-2 pb-4 mb-3 border-b border-[var(--color-gray6)] flex items-center gap-3">
+                <Avatar.Fallback size={28}>D</Avatar.Fallback>
+                <div className="flex flex-col items-start gap-0">
+                    <p className="text-[var(--color-gray12)] text-sm font-medium mb-[-2px]">Adam Kuzma</p>
+                    <span className="text-[var(--color-gray11)] text-sm">Personal Space</span>
+                </div>   
             </div>
             <DndContext collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd} modifiers={[restrictToVerticalAxis]}>
                 <SortableContext items={items.map(item => item.name)} strategy={verticalListSortingStrategy}>

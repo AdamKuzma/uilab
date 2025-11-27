@@ -8,6 +8,7 @@ import InteractiveGraph from "@/components/InteractiveGraph";
 import LineMinimap from "@/components/line-minimap/source";
 //import DictationWaveform from "@/components/dictation-waveform/main";
 import NestedMenu from "@/components/nested-menu/NestedMenu";
+import { AvatarFallbackExamples } from "@/components/fallback-avatar/FallbackAvatar";
 //import LiquidGlass from "@/components/liquid-glass/liquid-glass";
 
 export interface Component {
@@ -99,6 +100,14 @@ export const components: Component[] = [
     component: <NestedMenu />,
     preview: <NestedMenu />,
     tags: ["react", "menu", "navigation"],
+  },
+  {
+    id: "fallback-avatar",
+    title: "Fallback Avatar",
+    description: "Generates colorful, unique fallback avatars based on user names using SVG patterns and deterministic randomization.",
+    component: <AvatarFallbackExamples />,
+    preview: <AvatarFallbackExamples />,
+    tags: ["react", "radix-ui", "avatar", "svg"],
   },
   // {
   //   id: "liquid-glass",

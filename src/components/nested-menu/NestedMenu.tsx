@@ -9,7 +9,7 @@ import JournalIcon from "./assets/journal.svg";
 import ChevronIcon from "./assets/chevron-right.svg";
 
 import { Avatar } from "@/components/fallback-avatar/FallbackAvatar";
-import { DndContext, closestCenter, DragEndEvent, DragOverlay, DragStartEvent } from '@dnd-kit/core';
+import { DndContext, closestCenter, DragEndEvent, DragOverlay, DragStartEvent, DragOverEvent } from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -103,6 +103,7 @@ export default function NestedMenu() {
     const [items, setItems] = useState(nodes);
     const [activeNode, setActiveNode] = useState<Node | null>(null);
     const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+    const [overId, setOverId] = useState<string | null>(null);
 
     // Helper function to find a node by id
     const findNodeById = (items: Node[], id: string): Node | null => {
@@ -144,6 +145,11 @@ export default function NestedMenu() {
         setActiveNode(node);
     };
 
+    const handleDragOver = (event: DragOverEvent) => {
+        const { over } = event;
+        setOverId(over ? over.id as string : null);
+    };
+
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
         
@@ -167,6 +173,7 @@ export default function NestedMenu() {
         }
         
         setActiveNode(null);
+        setOverId(null);
     };
 
     return (
@@ -178,7 +185,13 @@ export default function NestedMenu() {
                     <span className="text-[var(--color-gray11)] text-sm">Personal Space</span>
                 </div>   
             </div>
-            <DndContext collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd} modifiers={[restrictToVerticalAxis]}>
+            <DndContext 
+                collisionDetection={closestCenter} 
+                onDragStart={handleDragStart} 
+                onDragOver={handleDragOver}
+                onDragEnd={handleDragEnd} 
+                modifiers={[restrictToVerticalAxis]}
+            >
                 <SortableContext items={items.map(item => item.name)} strategy={verticalListSortingStrategy}>
                     <ul className="px-2">
                         {items.map((node) => (
@@ -187,6 +200,8 @@ export default function NestedMenu() {
                                 node={node} 
                                 expandedItems={expandedItems}
                                 setExpandedItems={setExpandedItems}
+                                overId={overId}
+                                isAnyDragging={!!activeNode}
                             />
                         ))}                   
                     </ul>
@@ -207,23 +222,28 @@ function FilesystemItem({
     node, 
     depth = 0, 
     expandedItems, 
-    setExpandedItems 
+    setExpandedItems,
+    overId,
+    isAnyDragging 
 }: { 
     node: Node; 
     depth?: number;
     expandedItems: Set<string>;
     setExpandedItems: React.Dispatch<React.SetStateAction<Set<string>>>;
+    overId?: string | null;
+    isAnyDragging?: boolean;
 }) {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ 
         id: node.name 
     });
     
     const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-        opacity: isDragging ? 0 : 1,
+        transform: isAnyDragging ? undefined : CSS.Transform.toString(transform),
+        transition: isAnyDragging ? undefined : transition,
+        opacity: isDragging ? 1 : 1,
     };
     
+    const isOver = overId === node.name;
     const isOpen = expandedItems.has(node.name);
     const Icon = node.icon;
 
@@ -234,7 +254,10 @@ function FilesystemItem({
         : "text-[var(--color-gray9)] opacity-80";
 
     return (
-        <li ref={setNodeRef} style={style} key={node.name} className="">
+        <li ref={setNodeRef} style={style} key={node.name} className="relative">
+            {isOver && (
+                <div className="absolute -top-[1px] left-0 right-0 h-[2px] bg-blue-300 rounded-full z-10" />
+            )}
             <span 
                 className="group flex items-center justify-between gap-1.5 transition duration-200 hover:bg-[var(--color-gray3)] rounded-md pl-2 pr-1 py-1 cursor-pointer"
             >     
@@ -280,6 +303,8 @@ function FilesystemItem({
                                 depth={depth + 1}
                                 expandedItems={expandedItems}
                                 setExpandedItems={setExpandedItems}
+                                overId={overId}
+                                isAnyDragging={isAnyDragging}
                             />
                         ))}
                     </ul>

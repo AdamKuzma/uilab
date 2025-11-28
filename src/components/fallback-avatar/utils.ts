@@ -1,7 +1,7 @@
 export function hash(name: string) {
   let hash = 0;
-  for (var i = 0; i < name.length; i++) {
-    var character = name.charCodeAt(i);
+  for (let i = 0; i < name.length; i++) {
+    const character = name.charCodeAt(i);
     hash = (hash << 5) - hash + character;
     hash = hash & hash; // Convert to 32bit integer
   }
@@ -13,7 +13,7 @@ export function getDigit(number: number, ntn: number) {
 }
 
 export function getUnit(number: number, range: number, index?: number) {
-  let value = number % range;
+  const value = number % range;
 
   if (index && getDigit(number, index) % 2 === 0) {
     return -value;

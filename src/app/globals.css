@@ -86,16 +86,27 @@
 
   /* Gray */
   --color-gray1: hsl(0 0% 8.5%);
+  --color-gray1_5: hsl(0 0% 9.75%);  /* Between gray1 and gray2 */
   --color-gray2: hsl(0 0% 11%);
+  --color-gray2_5: hsl(0 0% 12.3%);  /* Between gray2 and gray3 */
   --color-gray3: hsl(0 0% 13.6%);
+  --color-gray3_5: hsl(0 0% 14.7%);  /* Between gray3 and gray4 */
   --color-gray4: hsl(0 0% 15.8%);
+  --color-gray4_5: hsl(0 0% 16.85%); /* Between gray4 and gray5 */
   --color-gray5: hsl(0 0% 17.9%);
+  --color-gray5_5: hsl(0 0% 19.2%);  /* Between gray5 and gray6 */
   --color-gray6: hsl(0 0% 20.5%);
+  --color-gray6_5: hsl(0 0% 22.4%);  /* Between gray6 and gray7 */
   --color-gray7: hsl(0 0% 24.3%);
+  --color-gray7_5: hsl(0 0% 27.75%); /* Between gray7 and gray8 */
   --color-gray8: hsl(0 0% 31.2%);
+  --color-gray8_5: hsl(0 0% 37.55%); /* Between gray8 and gray9 */
   --color-gray9: hsl(0 0% 43.9%);
+  --color-gray9_5: hsl(0 0% 46.65%); /* Between gray9 and gray10 */
   --color-gray10: hsl(0 0% 49.4%);
+  --color-gray10_5: hsl(0 0% 56.1%); /* Between gray10 and gray11 */
   --color-gray11: hsl(0 0% 62.8%);
+  --color-gray11_5: hsl(0 0% 77.9%); /* Between gray11 and gray12 */
   --color-gray12: hsl(0 0% 93%);
 }
 
@@ -136,16 +147,27 @@
 
   /* Gray */
   --color-gray1: hsl(0 0% 8.5%);
+  --color-gray1_5: hsl(0 0% 9.75%);  /* Between gray1 and gray2 */
   --color-gray2: hsl(0 0% 11%);
+  --color-gray2_5: hsl(0 0% 12.3%);  /* Between gray2 and gray3 */
   --color-gray3: hsl(0 0% 13.6%);
+  --color-gray3_5: hsl(0 0% 14.7%);  /* Between gray3 and gray4 */
   --color-gray4: hsl(0 0% 15.8%);
+  --color-gray4_5: hsl(0 0% 16.85%); /* Between gray4 and gray5 */
   --color-gray5: hsl(0 0% 17.9%);
+  --color-gray5_5: hsl(0 0% 19.2%);  /* Between gray5 and gray6 */
   --color-gray6: hsl(0 0% 20.5%);
+  --color-gray6_5: hsl(0 0% 22.4%);  /* Between gray6 and gray7 */
   --color-gray7: hsl(0 0% 24.3%);
+  --color-gray7_5: hsl(0 0% 27.75%); /* Between gray7 and gray8 */
   --color-gray8: hsl(0 0% 31.2%);
+  --color-gray8_5: hsl(0 0% 37.55%); /* Between gray8 and gray9 */
   --color-gray9: hsl(0 0% 43.9%);
+  --color-gray9_5: hsl(0 0% 46.65%); /* Between gray9 and gray10 */
   --color-gray10: hsl(0 0% 49.4%);
+  --color-gray10_5: hsl(0 0% 56.1%); /* Between gray10 and gray11 */
   --color-gray11: hsl(0 0% 62.8%);
+  --color-gray11_5: hsl(0 0% 77.9%); /* Between gray11 and gray12 */
   --color-gray12: hsl(0 0% 93%);
 }
 

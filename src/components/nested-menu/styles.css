@@ -1,0 +1,25 @@
+.p-text {
+    color: var(--color-gray12) !important;
+    opacity: 0.9;
+    font-size: 16px;
+    line-height: 1.65;
+    padding-bottom: 22px;
+}
+
+.p-section {
+    font-size: 16px;
+    line-height: 1.65;
+    padding-bottom: 22px;
+    color: var(--color-gray12) !important;
+    font-weight: 600;
+}
+
+.code {
+    background-color: var(--color-gray4);
+    border: 1px solid var(--color-gray6);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-gray12) !important;
+}

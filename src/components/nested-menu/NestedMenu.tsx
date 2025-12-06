@@ -8,6 +8,7 @@ import InboxIcon from "./assets/inbox.svg";
 import JournalIcon from "./assets/journal.svg";
 import ChevronIcon from "./assets/chevron-right.svg";
 import EllipsisIcon from "./assets/dots-horizontal.svg";
+import "./styles.css";
 
 import { Avatar } from "@/components/fallback-avatar/FallbackAvatar";
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, DragOverEvent, pointerWithin, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
@@ -101,10 +102,38 @@ const nodes: Node[] = [
     ]},
 ];
 
-export default function NestedMenu() {
-    const [items, setItems] = useState(nodes);
+export default function NestedMenu({ 
+    showHeader = true, 
+    height = "420px",
+    fullWidthHover = true,
+    defaultExpandedItems = [],
+    hiddenItems = [],
+    enableDragThreshold = true,
+    enableNormalization = true,
+    alwaysShowChevron = false
+}: { 
+    showHeader?: boolean; 
+    height?: string;
+    fullWidthHover?: boolean;
+    defaultExpandedItems?: string[];
+    hiddenItems?: string[];
+    enableDragThreshold?: boolean;
+    enableNormalization?: boolean;
+    alwaysShowChevron?: boolean;
+}) {
+    // Filter out hidden items from the tree
+    const filterHiddenItems = (nodes: Node[]): Node[] => {
+        return nodes
+            .filter(node => !hiddenItems.includes(node.name))
+            .map(node => ({
+                ...node,
+                nodes: node.nodes ? filterHiddenItems(node.nodes) : undefined
+            }));
+    };
+    
+    const [items, setItems] = useState(filterHiddenItems(nodes));
     const [activeNode, setActiveNode] = useState<Node | null>(null);
-    const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+    const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set(defaultExpandedItems));
     const [overId, setOverId] = useState<string | null>(null);
     const [dropPosition, setDropPosition] = useState<DropPosition>(null);
     const pointerYRef = React.useRef<number>(0);
@@ -116,18 +145,18 @@ export default function NestedMenu() {
     // Track normalized drop location to prevent flashing between adjacent items
     const [normalizedDropTarget, setNormalizedDropTarget] = React.useState<{ id: string; position: DropPosition } | null>(null);
     
-    // Configure sensors with distance threshold
-    const mouseSensor = useSensor(MouseSensor, {
+    // Configure sensors with optional distance threshold
+    const mouseSensor = useSensor(MouseSensor, enableDragThreshold ? {
         activationConstraint: {
             distance: 4,
         },
-    });
+    } : {});
     
-    const touchSensor = useSensor(TouchSensor, {
+    const touchSensor = useSensor(TouchSensor, enableDragThreshold ? {
         activationConstraint: {
             distance: 4,
         },
-    });
+    } : {});
     
     const sensors = useSensors(mouseSensor, touchSensor);
     
@@ -213,8 +242,10 @@ export default function NestedMenu() {
                         }
                     }
                     
-                    // Normalize the drop location
-                    const normalized = getNormalizedDropLocation(overId, newPosition);
+                    // Conditionally normalize the drop location
+                    const normalized = enableNormalization 
+                        ? getNormalizedDropLocation(overId, newPosition)
+                        : { id: overId, position: newPosition };
                     
                     // Update state if normalized location changed
                     setNormalizedDropTarget(prev => {
@@ -422,14 +453,16 @@ export default function NestedMenu() {
     };
 
     return (
-        <div className="w-[260px] h-[420px] bg-[var(--color-gray1)] border border-[var(--color-gray6)] overflow-x-hidden overscroll-y-contain rounded-xl py-2 max-w-sm overflow-y-auto my-0 mx-auto shadow-[0_2px_5px_-2px_rgba(0,0,0,0.0.08)]" onWheel={(e) => e.stopPropagation()}>
-            <div className="px-4.5 pt-2 pb-4 mb-3 border-b border-[var(--color-gray6)] flex items-center gap-2.5">
-                <Avatar.Fallback size={22}>D</Avatar.Fallback>
-                <div className="flex flex-col items-start gap-0">
-                    <p className="text-[var(--color-gray12)] text-sm font-medium mb-[-2px]">Adam Kuzma</p>
-                    {/* <span className="text-[var(--color-gray11)] text-sm">Personal Space</span> */}
+        <div className="w-[260px] bg-[var(--color-gray1)] border border-[var(--color-gray6)] overflow-x-hidden overscroll-y-contain rounded-xl py-2 max-w-sm overflow-y-auto my-0 mx-auto shadow-[0_2px_5px_-2px_rgba(0,0,0,0.0.08)]" style={{ height }} onWheel={(e) => e.stopPropagation()}>
+            {showHeader && (
+                <div className="px-4.5 pt-2 pb-4 mb-3 border-b border-[var(--color-gray6)] flex items-center gap-2.5">
+                    <Avatar.Fallback size={22}>D</Avatar.Fallback>
+                    <div className="flex flex-col items-start gap-0">
+                        <p className="text-[var(--color-gray12)] text-sm font-medium mb-[-2px]">Adam Kuzma</p>
+                        {/* <span className="text-[var(--color-gray11)] text-sm">Personal Space</span> */}
+                    </div>
                 </div>
-            </div>
+            )}
             <DndContext 
                 sensors={sensors}
                 collisionDetection={pointerWithin} 
@@ -448,6 +481,8 @@ export default function NestedMenu() {
                                 setExpandedItems={setExpandedItems}
                                 normalizedDropTarget={normalizedDropTarget}
                                 isAnyDragging={!!activeNode}
+                                fullWidthHover={fullWidthHover}
+                                alwaysShowChevron={alwaysShowChevron}
                             />
                         ))}                   
                     </ul>
@@ -471,6 +506,8 @@ function FilesystemItem({
     setExpandedItems,
     normalizedDropTarget,
     isAnyDragging,
+    fullWidthHover = true,
+    alwaysShowChevron = false,
 }: { 
     node: Node; 
     depth?: number;
@@ -478,6 +515,8 @@ function FilesystemItem({
     setExpandedItems: React.Dispatch<React.SetStateAction<Set<string>>>;
     normalizedDropTarget?: { id: string; position: DropPosition } | null;
     isAnyDragging?: boolean;
+    fullWidthHover?: boolean;
+    alwaysShowChevron?: boolean;
 }) {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ 
         id: node.name,
@@ -520,12 +559,12 @@ function FilesystemItem({
                 <div className="absolute -bottom-[1px] left-0 right-0 h-[2px] bg-blue-400 rounded-full z-10 animate-in fade-in duration-150" />
             )}
             <span 
-                style={depth > 0 ? {
+                style={depth > 0 && fullWidthHover ? {
                     marginLeft: `${-depth}rem`,
                     paddingLeft: `calc(${depth}rem + 0.5rem)`,
                 } : undefined}
                 className={`group flex items-center justify-between gap-1.5 transition-colors duration-200 rounded-md py-1 cursor-pointer ${
-                    depth > 0 ? 'pr-1' : 'pl-2 pr-1'
+                    depth > 0 ? (fullWidthHover ? 'pr-1' : 'pr-1 pl-2') : 'pl-2 pr-1'
                 } ${
                     isOver && dropPosition === 'into' 
                         ? 'bg-blue-100 dark:bg-blue-900/30' 
@@ -537,33 +576,69 @@ function FilesystemItem({
                 {...listeners}
             >     
                 <span 
-                    className="flex items-center gap-0"
+                    className="flex items-center min-w-0 flex-1"
                 >
                     {node.nodes && node.nodes.length > 0 ? (
-                        <button 
-                            className="relative w-6 h-6 flex items-center justify-center p-0 transition duration-200 cursor-pointer hover:bg-[var(--color-gray5)] rounded-sm" 
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setExpandedItems(prev => {
-                                    const newSet = new Set(prev);
-                                    if (newSet.has(node.name)) {
-                                        newSet.delete(node.name);
-                                    } else {
-                                        newSet.add(node.name);
-                                    }
-                                    return newSet;
-                                });
-                            }}
-                        >
-                            {Icon && (
-                                <Icon className={`${iconColor} scale-95 absolute inset-0 group-hover:opacity-0 transition-opacity duration-200`} />
-                            )}
-                            <ChevronIcon className={`scale-100 opacity-0 group-hover:opacity-60 transition-all duration-200 ${isOpen ? 'rotate-90' : ''}`}/>
-                        </button>
+                        alwaysShowChevron ? (
+                            // Always show chevron mode: chevron + icon side by side
+                            <>
+                                <button 
+                                    className="w-6 h-6 flex items-center justify-center flex-shrink-0 p-0 transition duration-200 cursor-pointer hover:bg-[var(--color-gray5)] rounded-sm" 
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setExpandedItems(prev => {
+                                            const newSet = new Set(prev);
+                                            if (newSet.has(node.name)) {
+                                                newSet.delete(node.name);
+                                            } else {
+                                                newSet.add(node.name);
+                                            }
+                                            return newSet;
+                                        });
+                                    }}
+                                    onPointerDown={(e) => e.stopPropagation()}
+                                    onMouseDown={(e) => e.stopPropagation()}
+                                >
+                                    <ChevronIcon className={`scale-90 opacity-60 transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}`}/>
+                                </button>
+                                <div className="w-6 h-6 flex items-center justify-center flex-shrink-0">
+                                    {Icon && <Icon className={`${iconColor} scale-95`} />}
+                                </div>
+                            </>
+                        ) : (
+                            // Original mode: icon that becomes chevron on hover
+                            <button 
+                                className="relative w-6 h-6 flex items-center justify-center flex-shrink-0 p-0 transition duration-200 cursor-pointer hover:bg-[var(--color-gray5)] rounded-sm" 
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setExpandedItems(prev => {
+                                        const newSet = new Set(prev);
+                                        if (newSet.has(node.name)) {
+                                            newSet.delete(node.name);
+                                        } else {
+                                            newSet.add(node.name);
+                                        }
+                                        return newSet;
+                                    });
+                                }}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                onMouseDown={(e) => e.stopPropagation()}
+                            >
+                                {Icon && (
+                                    <Icon className={`${iconColor} scale-95 absolute inset-0 group-hover:opacity-0 transition-opacity duration-200`} />
+                                )}
+                                <ChevronIcon className={`scale-100 opacity-0 group-hover:opacity-60 transition-all duration-200 ${isOpen ? 'rotate-90' : ''}`}/>
+                            </button>
+                        )
                     ) : (
-                        Icon && <Icon className={`${iconColor} scale-95`} />
+                        <>
+                            {alwaysShowChevron && <div className="w-6 h-6 flex-shrink-0" />}
+                            <div className="w-6 h-6 flex items-center justify-center flex-shrink-0">
+                                {Icon && <Icon className={`${iconColor} scale-95`} />}
+                            </div>
+                        </>
                     )}
-                    <span className="text-[14px] text-[var(--color-gray12)] opacity-80 font-medium ml-1.5 select-none">
+                    <span className="text-[14px] text-[var(--color-gray12)] opacity-80 font-medium ml-1.5 select-none truncate min-w-0">
                         {node.name}
                     </span>
                 </span>
@@ -573,6 +648,8 @@ function FilesystemItem({
                         e.stopPropagation();
                         // Add your context menu logic here
                     }}
+                    onPointerDown={(e) => e.stopPropagation()}
+                    onMouseDown={(e) => e.stopPropagation()}
                 >
                     <EllipsisIcon className="text-[var(--color-gray12)]" />
                 </button>
@@ -589,6 +666,8 @@ function FilesystemItem({
                                 setExpandedItems={setExpandedItems}
                                 normalizedDropTarget={normalizedDropTarget}
                                 isAnyDragging={isAnyDragging}
+                                fullWidthHover={fullWidthHover}
+                                alwaysShowChevron={alwaysShowChevron}
                             />
                         ))}
                     </ul>

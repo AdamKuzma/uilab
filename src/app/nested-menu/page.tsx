@@ -9,7 +9,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import InboxIcon from "@/components/nested-menu/assets/inbox.svg";
-import NotesIcon from "@/components/nested-menu/assets/notes.svg";
+import JournalIcon from "@/components/nested-menu/assets/journal.svg";
 
 // Theme toggle component
 function ThemeToggle() {
@@ -45,6 +45,106 @@ function CodeBlock({ code, language = "typescript", maxHeight }: { code: string;
         >
           {code}
         </SyntaxHighlighter>
+      </div>
+    </div>
+  );
+}
+
+// Drop zone visualization component
+function DropZoneVisualization() {
+  const [hoveredZone, setHoveredZone] = useState<string | null>(null);
+
+  const zones = [
+    { id: 'above-inbox', label: 'above Inbox', top: '0%', height: '15%', hover: 'hover:bg-blue-500/10' },
+    { id: 'inside-inbox', label: 'inside Inbox', top: '15%', height: '20%', hover: 'hover:bg-blue-500/20' },
+    { id: 'below-inbox', label: 'below Inbox', top: '35%', height: '15%', hover: 'hover:bg-blue-500/10' },
+    { id: 'above-journal', label: 'above Journal', top: '50%', height: '15%', hover: 'hover:bg-blue-500/10' },
+    { id: 'inside-journal', label: 'inside Journal', top: '65%', height: '20%', hover: 'hover:bg-blue-500/20' },
+    { id: 'below-journal', label: 'below Journal', top: '85%', height: '15%', hover: 'hover:bg-blue-500/10' },
+  ];
+
+  return renderDropZoneVisualization(zones, hoveredZone, setHoveredZone, 'Three drop zones');
+}
+
+// Normalized drop zone visualization component (with "between" zone)
+function DropZoneVisualizationNormalized() {
+  const [hoveredZone, setHoveredZone] = useState<string | null>(null);
+
+  const zones = [
+    { id: 'above-inbox', label: 'above Inbox', top: '0%', height: '15%', hover: 'hover:bg-blue-500/10' },
+    { id: 'inside-inbox', label: 'inside Inbox', top: '15%', height: '20%', hover: 'hover:bg-blue-500/20' },
+    { id: 'between', label: 'between items', top: '35%', height: '30%', hover: 'hover:bg-purple-500/10' },
+    { id: 'inside-journal', label: 'inside Journal', top: '65%', height: '20%', hover: 'hover:bg-blue-500/20' },
+    { id: 'below-journal', label: 'below Journal', top: '85%', height: '15%', hover: 'hover:bg-blue-500/10' },
+  ];
+
+  return renderDropZoneVisualization(zones, hoveredZone, setHoveredZone, 'Normalized drop zone');
+}
+
+// Shared rendering logic for drop zone visualizations
+function renderDropZoneVisualization(
+  zones: Array<{ id: string; label: string; top: string; height: string; hover: string }>,
+  hoveredZone: string | null,
+  setHoveredZone: (zone: string | null) => void,
+  defaultText: string
+) {
+
+  return (
+    <div className="grid grid-cols-1 gap-0 mb-12 mt-6 px-8 py-8 rounded-xl border border-[var(--color-gray6)] bg-[var(--color-gray3)]">
+      <div className="flex flex-col items-center justify-center gap-4">
+        {/* Static visualization of drop zones */}
+        <div className="w-[340px] rounded-2xl">
+          <div className="relative rounded-xl bg-[var(--color-gray2)] border border-[var(--color-gray6)] overflow-hidden">
+            {/* Content */}
+            <div className="flex items-center gap-3 py-5 px-3 relative z-10">
+              <div className="w-5 h-5 mt-[-2px]">
+                <InboxIcon className="w-full h-full text-[var(--color-gray11)]" />
+              </div>
+              <span className="text-sm font-medium text-[var(--color-gray12)]">Inbox</span>
+            </div>
+            <div className="flex items-center gap-3 py-5 px-3 relative z-10">
+              <div className="w-5 h-5 mt-[-2px]">
+                <JournalIcon className="w-full h-full text-[var(--color-gray11)]" />
+              </div>
+              <span className="text-sm font-medium text-[var(--color-gray12)]">Journal</span>
+            </div>
+            
+            {/* Hoverable zones */}
+            {zones.map((zone, index) => {
+              const isFirst = index === 0;
+              const isLast = index === zones.length - 1;
+              
+              return (
+                <div
+                  key={zone.id}
+                  className={`absolute left-0 right-0 ${zone.hover} transition-colors duration-150 cursor-pointer z-20 ${
+                    isFirst ? 'rounded-t-xl' : ''
+                  } ${isLast ? 'rounded-b-xl' : ''}`}
+                  style={{
+                    top: zone.top,
+                    height: zone.height,
+                  }}
+                  onMouseEnter={() => setHoveredZone(zone.id)}
+                  onMouseLeave={() => setHoveredZone(null)}
+                />
+              );
+            })}
+            
+            {/* Zone separators (dotted lines) */}
+            <div className="absolute left-0 right-0 top-[15%] border-t border-dashed border-gray-300 pointer-events-none z-30" />
+            <div className="absolute left-0 right-0 top-[35%] border-t border-dashed border-gray-300 pointer-events-none z-30" />
+              <div className="absolute left-0 right-0 top-[50%] border-t border-gray-300 pointer-events-none z-30" />
+            <div className="absolute left-0 right-0 top-[65%] border-t border-dashed border-gray-300 pointer-events-none z-30" />
+            <div className="absolute left-0 right-0 top-[85%] border-t border-dashed border-gray-300 pointer-events-none z-30" />
+          </div>
+        </div>
+        
+        {/* Dynamic zone label below */}
+        <div className="text-xs text-[var(--color-gray11)] mt-2 mb-[-4px] flex items-center justify-center">
+          <span className={hoveredZone ? 'capitalize' : ''}>
+            {hoveredZone ? zones.find(z => z.id === hoveredZone)?.label : defaultText}
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -201,21 +301,24 @@ export function Tree() {
             </p>
 
             <p className="p-text">
-                In page-inside-page structures, there is the tension of differentiating between opening an item and expanding its contents. Typically, you assign different interaction areas: clicking the row opens the page, while clicking the chevron expands or collapses it.
+                Nested lists often carry two separate actions: opening the item and expanding its children. The row opens the page; the chevron reveals what’s inside. When these cues aren’t clear, the list feels unpredictable.
             </p>
             <p className="p-text">
-                Keeping chevrons always visible improves affordance but reduces valuable horizontal space. I chose to swap the item's icon for the chevron on hover. This prevents the text from truncating too early, and keeps the list visually lighter.  
+              Keeping chevrons always visible makes the affordance obvious, but it costs horizontal space. Long titles truncate sooner and the list looks heavier.  
+            </p>
+            <p className="p-text">
+              To balance this, I swapped the item’s icon for a chevron on hover. This reveals the affordance only when you need it, while letting the text breathe by default.  
             </p>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 mt-4 mb-5 px-8 py-0 rounded-xl border border-[var(--color-gray6)] bg-[var(--color-gray3)]">
                 <div>
                     <div className="flex flex-col items-center justify-center p-8">
-                    <NestedMenu showHeader={false} alwaysShowChevron={true} height="320px" defaultExpandedItems={['Bookmarks', 'Books']} hiddenItems={['Ideas', 'Notes']}/>
+                    <NestedMenu width="fill" showHeader={false} alwaysShowChevron={true} height="320px" defaultExpandedItems={['Bookmarks', 'Books']} hiddenItems={['Ideas', 'Notes']}/>
                     <p className="text-xs text-[var(--color-gray11)] mt-4">Chevrons always visible</p>
                     </div>
                 </div>
                 <div>
                     <div className="flex flex-col items-center justify-center p-8">
-                    <NestedMenu showHeader={false} height="320px" defaultExpandedItems={['Bookmarks', 'Books']} hiddenItems={['Ideas', 'Notes']}/>
+                    <NestedMenu width="fill" showHeader={false} height="320px" defaultExpandedItems={['Bookmarks', 'Books']} hiddenItems={['Ideas', 'Notes']}/>
                     <p className="text-xs text-[var(--color-gray11)] mt-4">Chevrons swap on hover</p>
                     </div>
                 </div>
@@ -224,7 +327,7 @@ export function Tree() {
                 Visible chevrons reduce the available space for text.
             </p>
             <p className="p-text">
-                Chevrons have their own hover states to clearly indicate expand/collapse. Since there is no hover state on touch screens, chevrons should always be visible on mobile breakpoints.
+              Since on touch screens there’s no hover, chevrons should stay visible at mobile breakpoints. This keeps the behavior consistent.
             </p>
         </div>
 
@@ -318,13 +421,13 @@ export function Tree({ items }) {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 mt-4 mb-5 px-8 py-0 rounded-xl border border-[var(--color-gray6)] bg-[var(--color-gray3)]">
                 <div>
                     <div className="flex flex-col items-center justify-center p-8">
-                    <NestedMenu showHeader={false} height="360px" fullWidthHover={false} defaultExpandedItems={['Journal', 'Trips', 'Summer']} hiddenItems={['Inbox', 'Bookmarks', 'Ideas', 'Notes', 'Events']} />
+                    <NestedMenu showHeader={false} width="fill" height="360px" fullWidthHover={false} defaultExpandedItems={['Journal', 'Trips', 'Summer']} hiddenItems={['Inbox', 'Bookmarks', 'Ideas', 'Notes', 'Events']} />
                     <p className="text-xs text-[var(--color-gray11)] mt-4">With dead zones</p>
                     </div>
                 </div>
                 <div>
                     <div className="flex flex-col items-center justify-center p-8">
-                    <NestedMenu showHeader={false} height="360px" defaultExpandedItems={['Journal', 'Trips', 'Summer']} hiddenItems={['Inbox', 'Bookmarks', 'Ideas', 'Notes', 'Events']}/>
+                    <NestedMenu showHeader={false} width="fill" height="360px" defaultExpandedItems={['Journal', 'Trips', 'Summer']} hiddenItems={['Inbox', 'Bookmarks', 'Ideas', 'Notes', 'Events']}/>
                     <p className="text-xs text-[var(--color-gray11)] mt-4">No dead zones</p>
                     </div>
                 </div>
@@ -400,70 +503,36 @@ export function Tree({ items }) {
             </p>
 
             <p className="p-text">
-            Behind the indicators is a simple zone model that determines which one appears. Each item is divided into three vertical regions based on the pointer position:
-            <ul className="list-disc list-inside mt-6">
-                <li>Top third → drop above</li>
-                <li>Middle third → drop into</li>
-                <li>Bottom third → drop below</li>
-            </ul>
+              Drop indicators depend on where the pointer sits relative to an item. A simple model divides each row into three vertical regions: above, into, and below.
             </p>
 
-            <div className="grid grid-cols-1 gap-0 mb-12 mt-6 px-8 py-8 rounded-xl border border-[var(--color-gray6)] bg-[var(--color-gray3)]">
-                <div className="flex flex-col items-center justify-center">
-                    {/* Static visualization of drop zones */}
-                    <div className="w-[340px] bg-[var(--color-gray1)] border border-[var(--color-gray6)] rounded-xl p-3">
-                        {/* First item with zone labels */}
-                        <div className="relative mb-2">
-                            <div className="flex items-center gap-2 py-6 px-3 rounded-md bg-[var(--color-gray2)] border border-[var(--color-gray6)]">
-                                <svg width="16" height="16" viewBox="0 0 16 16" className="text-[var(--color-gray11)]">
-                                    <path fill="currentColor" d="M3 2h10a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z"/>
-                                </svg>
-                                <span className="text-sm font-medium text-[var(--color-gray12)]">Inbox</span>
-                            </div>
-                            {/* Zone labels */}
-                            <div className="absolute right-[-90px] top-0 flex flex-col h-full justify-between text-xs text-[var(--color-gray11)] pointer-events-none">
-                                <div className="h-[1%] flex items-center">
-                                    <span className="bg-[var(--color-gray4)] px-2 py-0.5 rounded">Above</span>
-                                </div>
-                                <div className="h-[1%] flex items-center">
-                                    <span className="bg-blue-500/20 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded">Into</span>
-                                </div>
-                                <div className="h-[1%] flex items-center">
-                                    <span className="bg-[var(--color-gray4)] px-2 py-0.5 rounded">Below</span>
-                                </div>
-                            </div>
-                            {/* Zone separators (dotted lines) */}
-                            <div className="absolute left-0 right-0 top-[33%] border-t border-dashed border-blue-500 pointer-events-none" />
-                            <div className="absolute left-0 right-0 top-[67%] border-t border-dashed border-blue-500 pointer-events-none" />
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <DropZoneVisualization />
 
             <p className="p-text">
-                The zone proportions can be adjusted depending on how often users are expected to drop between vs into items, but one-third splits felt the most natural in my tests.
-            </p>
-
-            <p className="p-section mt-12">
-                Handling Adjacent Boundaries
-            </p>
-
-            <p className="p-text">
-                One challenge with this approach was that when dragging between two adjacent items, the line indicator would flash because the pointer would detect the change between below and above zones of the two adjacent siblings items.
+              When dragging between two siblings, this model can create a distracting flicker. As the pointer crosses the boundary between items, the indicator rapidly switches between above and below states.
             </p>
             <p className="p-text">
-                To fix that, I created a function that normalizes the drop location combining adjacent items into a single drop zone. This prevents the flickering between sibling boundaries.
+              To fix this, I normalized the drop location so that adjacent siblings share a single boundary. This removes the flicker and makes the drag feel stable.
             </p>
+
+            <DropZoneVisualizationNormalized />
+
+
+            <p className="p-text">
+              This normalization only applies to siblings at the same level. When moving between levels, transitions remain visible so the user understands whether they’re dropping into a list or outside of it.
+            </p>
+
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 mb-5 mt-6 px-8 py-0 rounded-xl border border-[var(--color-gray6)] bg-[var(--color-gray3)]">
                 <div>
                     <div className="flex flex-col items-center justify-center p-8">
-                    <NestedMenu showHeader={false} height="300px" enableNormalization={false}/>
+                    <NestedMenu showHeader={false} width="fill" height="300px" enableNormalization={false}/>
                     <p className="text-xs text-[var(--color-gray11)] mt-4">Three drop zones</p>
                     </div>
                 </div>
                 <div>
                     <div className="flex flex-col items-center justify-center p-8">
-                    <NestedMenu showHeader={false} height="300px" enableNormalization={true}/>
+                    <NestedMenu showHeader={false} width="fill" height="300px" enableNormalization={true}/>
                     <p className="text-xs text-[var(--color-gray11)] mt-4">Normalized drop zone</p>
                     </div>
                 </div>
@@ -472,7 +541,7 @@ export function Tree({ items }) {
                 Try slowly dragging an item between siblings. Can you spot which one feels better?
             </p>
 
-            <CodeBlock code={`// Normalize drop location: "below item2" and "above item3" are the same if they're siblings
+            {/* <CodeBlock code={`// Normalize drop location: "below item2" and "above item3" are the same if they're siblings
 const getNormalizedDropLocation = (id: string, position: DropPosition): { id: string; position: DropPosition } => {
     if (position === 'into') {
         return { id, position };
@@ -493,11 +562,8 @@ const getNormalizedDropLocation = (id: string, position: DropPosition): { id: st
     return { id, position };
 };
                 
-            `} language="typescript" maxHeight="320px"/>
+            `} language="typescript" maxHeight="320px"/> */}
 
-            <p className="p-text">
-                This normalization only applies to siblings at the same level. When dragging between different levels of nesting, the transitions should remain visible so users understand whether they’re dropping into a list or outside of it.
-            </p>
         </div>
 
          {/* Drag Threshold */}
@@ -507,22 +573,22 @@ const getNormalizedDropLocation = (id: string, position: DropPosition): { id: st
             </p>
 
             <p className="p-text">
-                Clicking on a list item would immediately trigger a drag action, which caused a small but distracting flash effect from the active press state and the ghost item appearing.
+                Without a drag threshold, clicking on a list item triggers the drag immediately. This causes a small visual flash as the pressed state and the ghost item fight for attention.
             </p>
             <p className="p-text">
-                To solve that, I added a 4px drag activation threshold, meaning the drag only begins after the pointer moves at least 4 pixels. This keeps the active press state more predictable while still supporting a clean drag interaction.
+                To solve that, I added a 4px drag activation threshold, meaning the drag only begins after the pointer moves at least 4 pixels. This keeps the active press state cleaner while still supporting a smooth drag interaction.
             </p>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 mb-2 mt-8 px-8 py-0 rounded-xl border border-[var(--color-gray6)] bg-[var(--color-gray3)]">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 mb-2 mt-6 px-8 py-18 rounded-xl border border-[var(--color-gray6)] bg-[var(--color-gray3)]">
                 <div>
                     <div className="flex flex-col items-center justify-center p-8">
-                    <NestedMenu showHeader={false} height="300px" enableDragThreshold={false}/>
+                    <NestedMenu showHeader={false} width="fill" height="300px" enableDragThreshold={false} enableHoverThresholdAfterDrag={false}/>
                     <p className="text-xs text-[var(--color-gray11)] mt-4">No drag threshold</p>
                     </div>
                 </div>
                 <div>
                     <div className="flex flex-col items-center justify-center p-8">
-                    <NestedMenu showHeader={false} height="300px" enableDragThreshold={true}/>
-                    <p className="text-xs text-[var(--color-gray11)] mt-4">Added drag threshold</p>
+                    <NestedMenu showHeader={false} width="fill" height="300px" enableDragThreshold={true} enableHoverThresholdAfterDrag={true}/>
+                    <p className="text-xs text-[var(--color-gray11)] mt-4">4px drag threshold</p>
                     </div>
                 </div>
             </div>
@@ -530,24 +596,6 @@ const getNormalizedDropLocation = (id: string, position: DropPosition): { id: st
         <p className="text-xs text-center text-[var(--color-gray9)] ">
             Try clicking on a list item. See if you can spot the difference.
         </p>
-
-        
-        {/* Preventing Invalid Drops */}
-         {/* <div className="mb-5 mt-16">
-            <p className="p-section">
-                Preventing Invalid Drops
-            </p>
-
-            <p className="p-text">
-                One error I've encountered was dragging a parent item into it's child, which basically disappeared both of them from the list.
-            </p>
-            <p className="p-text">
-                To prevent that form happening I've added a helper function to check if target is a descendant to disable invalid drop targets and remove the visual indicators for them.
-            </p>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 mb-6 mt-8 px-8 py-6 rounded-xl border border-[var(--color-gray6)] bg-[var(--color-gray3)]">
-                Code
-            </div>
-        </div> */}
 
 
         {/* Preventing Invalid Drops */}

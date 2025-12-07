@@ -105,21 +105,25 @@ const nodes: Node[] = [
 export default function NestedMenu({ 
     showHeader = true, 
     height = "420px",
+    width = "260px",
     fullWidthHover = true,
     defaultExpandedItems = [],
     hiddenItems = [],
     enableDragThreshold = true,
     enableNormalization = true,
-    alwaysShowChevron = false
+    alwaysShowChevron = false,
+    enableHoverThresholdAfterDrag = true
 }: { 
     showHeader?: boolean; 
     height?: string;
+    width?: string;
     fullWidthHover?: boolean;
     defaultExpandedItems?: string[];
     hiddenItems?: string[];
     enableDragThreshold?: boolean;
     enableNormalization?: boolean;
     alwaysShowChevron?: boolean;
+    enableHoverThresholdAfterDrag?: boolean;
 }) {
     // Filter out hidden items from the tree
     const filterHiddenItems = (nodes: Node[]): Node[] => {
@@ -144,6 +148,44 @@ export default function NestedMenu({
     
     // Track normalized drop location to prevent flashing between adjacent items
     const [normalizedDropTarget, setNormalizedDropTarget] = React.useState<{ id: string; position: DropPosition } | null>(null);
+    
+    // Track hover threshold after drag ends
+    const [hoverDisabledAfterDrag, setHoverDisabledAfterDrag] = React.useState(false);
+    const dropPositionRef = React.useRef<{ x: number; y: number } | null>(null);
+    
+    // Keep cursor as pointer during drag
+    React.useEffect(() => {
+        if (activeNode) {
+            const originalCursor = document.body.style.cursor;
+            document.body.style.cursor = 'pointer';
+            return () => {
+                document.body.style.cursor = originalCursor;
+            };
+        }
+    }, [activeNode]);
+    
+    // Track mouse movement after drag to enable hover threshold
+    React.useEffect(() => {
+        if (!enableHoverThresholdAfterDrag || !hoverDisabledAfterDrag || !dropPositionRef.current) return;
+        
+        const handleMouseMove = (e: MouseEvent) => {
+            const dropPos = dropPositionRef.current;
+            if (!dropPos) return;
+            
+            const distance = Math.sqrt(
+                Math.pow(e.clientX - dropPos.x, 2) + 
+                Math.pow(e.clientY - dropPos.y, 2)
+            );
+            
+            if (distance >= 4) {
+                setHoverDisabledAfterDrag(false);
+                dropPositionRef.current = null;
+            }
+        };
+        
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => window.removeEventListener('mousemove', handleMouseMove);
+    }, [hoverDisabledAfterDrag, enableHoverThresholdAfterDrag]);
     
     // Configure sensors with optional distance threshold
     const mouseSensor = useSensor(MouseSensor, enableDragThreshold ? {
@@ -196,9 +238,11 @@ export default function NestedMenu({
     };
     
     // Track pointer position during drag
+    const pointerXRef = React.useRef<number>(0);
     React.useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
             pointerYRef.current = e.clientY;
+            pointerXRef.current = e.clientX;
         };
         
         window.addEventListener('mousemove', handleMouseMove);
@@ -411,6 +455,15 @@ export default function NestedMenu({
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
         
+        // Capture cursor position at drop for hover threshold
+        if (enableHoverThresholdAfterDrag) {
+            dropPositionRef.current = {
+                x: pointerXRef.current,
+                y: pointerYRef.current
+            };
+            setHoverDisabledAfterDrag(true);
+        }
+        
         // Clear middle zone tracking
         middleZoneStartTimeRef.current = null;
         setNormalizedDropTarget(null);
@@ -422,6 +475,8 @@ export default function NestedMenu({
                 setActiveNode(null);
                 setOverId(null);
                 setDropPosition(null);
+                setHoverDisabledAfterDrag(false);
+                dropPositionRef.current = null;
                 return; // Abort the drop
             }
             
@@ -452,8 +507,12 @@ export default function NestedMenu({
         setDropPosition(null);
     };
 
+    const isFill = width === 'fill';
+    const isAuto = width === 'auto';
+    const widthStyle = isFill ? { height, width: '100%' } : { height, width };
+    
     return (
-        <div className="w-[260px] bg-[var(--color-gray1)] border border-[var(--color-gray6)] overflow-x-hidden overscroll-y-contain rounded-xl py-2 max-w-sm overflow-y-auto my-0 mx-auto shadow-[0_2px_5px_-2px_rgba(0,0,0,0.0.08)]" style={{ height }} onWheel={(e) => e.stopPropagation()}>
+        <div className={`bg-[var(--color-gray1)] border border-[var(--color-gray6)] overflow-x-hidden overscroll-y-contain rounded-xl py-2 overflow-y-auto ${isFill ? 'w-full' : 'my-0 mx-auto'} ${isAuto || isFill ? '' : 'max-w-sm'} shadow-[0_2px_5px_-2px_rgba(0,0,0,0.0.08)]`} style={widthStyle} onWheel={(e) => e.stopPropagation()}>
             {showHeader && (
                 <div className="px-4.5 pt-2 pb-4 mb-3 border-b border-[var(--color-gray6)] flex items-center gap-2.5">
                     <Avatar.Fallback size={22}>D</Avatar.Fallback>
@@ -483,13 +542,14 @@ export default function NestedMenu({
                                 isAnyDragging={!!activeNode}
                                 fullWidthHover={fullWidthHover}
                                 alwaysShowChevron={alwaysShowChevron}
+                                hoverDisabledAfterDrag={enableHoverThresholdAfterDrag ? hoverDisabledAfterDrag : false}
                             />
                         ))}                   
                     </ul>
                 </SortableContext>
-                <DragOverlay>
+                <DragOverlay style={{ cursor: 'pointer' }}>
                     {activeNode ? (
-                        <div className="opacity-50">
+                        <div className="opacity-50 cursor-pointer">
                             <DragOverlayItem node={activeNode} expandedItems={expandedItems} />
                         </div>
                     ) : null}
@@ -508,6 +568,7 @@ function FilesystemItem({
     isAnyDragging,
     fullWidthHover = true,
     alwaysShowChevron = false,
+    hoverDisabledAfterDrag = false,
 }: { 
     node: Node; 
     depth?: number;
@@ -517,6 +578,7 @@ function FilesystemItem({
     isAnyDragging?: boolean;
     fullWidthHover?: boolean;
     alwaysShowChevron?: boolean;
+    hoverDisabledAfterDrag?: boolean;
 }) {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ 
         id: node.name,
@@ -563,13 +625,15 @@ function FilesystemItem({
                     marginLeft: `${-depth}rem`,
                     paddingLeft: `calc(${depth}rem + 0.5rem)`,
                 } : undefined}
-                className={`group flex items-center justify-between gap-1.5 transition-colors duration-200 rounded-md py-1 cursor-pointer ${
+                className={`${hoverDisabledAfterDrag ? '' : 'group'} flex items-center justify-between gap-1.5 transition-colors duration-200 rounded-md py-1 cursor-pointer ${
                     depth > 0 ? (fullWidthHover ? 'pr-1' : 'pr-1 pl-2') : 'pl-2 pr-1'
                 } ${
                     isOver && dropPosition === 'into' 
                         ? 'bg-blue-100 dark:bg-blue-900/30' 
                         : isDragging 
                         ? '' 
+                        : hoverDisabledAfterDrag 
+                        ? 'active:bg-[var(--color-gray4)]'
                         : 'hover:bg-[var(--color-gray3)] active:bg-[var(--color-gray4)]'
                 }`}
                 {...attributes}
@@ -667,6 +731,7 @@ function FilesystemItem({
                                 normalizedDropTarget={normalizedDropTarget}
                                 isAnyDragging={isAnyDragging}
                                 fullWidthHover={fullWidthHover}
+                                hoverDisabledAfterDrag={hoverDisabledAfterDrag}
                                 alwaysShowChevron={alwaysShowChevron}
                             />
                         ))}

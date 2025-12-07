@@ -10,7 +10,7 @@ import ChevronIcon from "./assets/chevron-right.svg";
 import EllipsisIcon from "./assets/dots-horizontal.svg";
 
 import { Avatar } from "@/components/fallback-avatar/FallbackAvatar";
-import { DndContext, DragEndEvent, DragStartEvent, closestCenter, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, closestCenter, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { SortableContext, useSortable, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';

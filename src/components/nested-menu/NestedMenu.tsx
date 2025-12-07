@@ -203,7 +203,7 @@ export default function NestedMenu({
     const sensors = useSensors(mouseSensor, touchSensor);
     
     // Helper to find the parent array and index of a node
-    const findNodeContext = (items: Node[], targetId: string, parent: Node[] = items): { parent: Node[]; index: number } | null => {
+    const findNodeContext = React.useCallback((items: Node[], targetId: string, parent: Node[] = items): { parent: Node[]; index: number } | null => {
         for (let i = 0; i < parent.length; i++) {
             if (parent[i].name === targetId) {
                 return { parent, index: i };
@@ -214,10 +214,10 @@ export default function NestedMenu({
             }
         }
         return null;
-    };
+    }, []);
     
     // Normalize drop location: "below item2" and "above item3" are the same if they're siblings
-    const getNormalizedDropLocation = (id: string, position: DropPosition): { id: string; position: DropPosition } => {
+    const getNormalizedDropLocation = React.useCallback((id: string, position: DropPosition): { id: string; position: DropPosition } => {
         if (position === 'into') {
             return { id, position };
         }
@@ -235,7 +235,7 @@ export default function NestedMenu({
         
         // If position is 'above' and we have a previous sibling, keep it as 'above' (already normalized)
         return { id, position };
-    };
+    }, [items, findNodeContext]);
     
     // Track pointer position during drag
     const pointerXRef = React.useRef<number>(0);
@@ -316,10 +316,10 @@ export default function NestedMenu({
                 cancelAnimationFrame(rafRef.current);
             }
         };
-    }, [activeNode, overId, dropPosition, items]);
+    }, [activeNode, overId, dropPosition, items, enableNormalization, getNormalizedDropLocation, isDescendantOf]);
 
     // Helper function to find a node by id
-    const findNodeById = (items: Node[], id: string): Node | null => {
+    const findNodeById = React.useCallback((items: Node[], id: string): Node | null => {
         for (const item of items) {
             if (item.name === id) return item;
             if (item.nodes) {
@@ -328,10 +328,10 @@ export default function NestedMenu({
             }
         }
         return null;
-    };
+    }, []);
 
     // Helper function to check if target is a descendant of parent
-    const isDescendantOf = (items: Node[], parentId: string, targetId: string): boolean => {
+    const isDescendantOf = React.useCallback((items: Node[], parentId: string, targetId: string): boolean => {
         const parent = findNodeById(items, parentId);
         if (!parent || !parent.nodes) return false;
         
@@ -344,7 +344,7 @@ export default function NestedMenu({
         }
         
         return false;
-    };
+    }, [findNodeById]);
 
     // Helper function to remove a node from anywhere in the tree
     const removeNode = (items: Node[], nodeId: string): { items: Node[], removed: Node | null } => {

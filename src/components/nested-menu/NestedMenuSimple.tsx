@@ -128,6 +128,7 @@ export default function NestedMenuSimple({
     const sensors = useSensors(mouseSensor, touchSensor);
     
     // Helper to find node by id
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const findNodeById = (items: Node[], id: string): Node | null => {
         for (const item of items) {
             if (item.name === id) return item;
@@ -153,7 +154,7 @@ export default function NestedMenuSimple({
         return null;
     };
 
-    const handleDragStart = (event: DragStartEvent) => {
+    const handleDragStart = (_event: DragStartEvent) => {
         // Drag started - no overlay needed
     };
 

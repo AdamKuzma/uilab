@@ -196,7 +196,7 @@ export default function NestedMenuArticle() {
                 What surprised me was how many small interaction details sit beneath a pattern that feels so familiar on the surface. Hundreds of invisible decisions that make it feel simple and dependable.
             </p>
             <p className="p-text">
-                In this article, I'll break down some of those details and explore the interaction choices that make nested lists feel better to use.
+                In this article, I&apos;ll break down some of those details and explore the interaction choices that make nested lists feel better to use.
             </p> 
             <div className="grid grid-cols-1 gap-0 mt-4 mb-5 px-8 py-0 rounded-xl border border-[var(--color-gray6)] bg-[var(--color-gray3)]">
                 <div>
@@ -416,7 +416,7 @@ export function Tree({ items }) {
                 Nested items are indented to visually indicate nesting hierarchy, which creates empty space on the left. If you hover in that empty area, the pointer is technically outside the item which causes unstable hover and drag targets.
             </p>
             <p className="p-text">
-                I expanded the interactive area of each row so it still counts as "hovering" even when the pointer is inside the indentation region. 
+                I expanded the interactive area of each row so it still counts as &quot;hovering&quot; even when the pointer is inside the indentation region. 
             </p>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 mt-4 mb-5 px-8 py-0 rounded-xl border border-[var(--color-gray6)] bg-[var(--color-gray3)]">
                 <div>
@@ -478,7 +478,7 @@ export function Tree({ items }) {
                 To solve for that, a common pattern is to use drop indicators instead. I’ve used line drop indicators for same-level placement between siblings and row highlight to indicate nesting inside a parent
             </p>
             <p className="p-text">
-                I've also decided to not move items mid-drag and keep a ghost copy of the dragged item. This prevents the items from jumping and keeps the pointer predicable, making the lists feel more consistent.
+                I&apos;ve also decided to not move items mid-drag and keep a ghost copy of the dragged item. This prevents the items from jumping and keeps the pointer predicable, making the lists feel more consistent.
             </p> 
 
             <div className="grid grid-cols-1 gap-0 mt-4 mb-5 px-8 py-0 rounded-xl border border-[var(--color-gray6)] bg-[var(--color-gray3)]">

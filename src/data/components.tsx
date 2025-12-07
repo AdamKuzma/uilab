@@ -8,8 +8,8 @@ import InteractiveGraph from "@/components/InteractiveGraph";
 import LineMinimap from "@/components/line-minimap/source";
 //import DictationWaveform from "@/components/dictation-waveform/main";
 import NestedMenu from "@/components/nested-menu/NestedMenu";
-import MagneticHover from "@/components/magnetic-hover/MagneticHover";
-import { AvatarFallbackExamples } from "@/components/fallback-avatar/FallbackAvatar";
+// import MagneticHover from "@/components/magnetic-hover/MagneticHover";
+// import { AvatarFallbackExamples } from "@/components/fallback-avatar/FallbackAvatar";
 //import LiquidGlass from "@/components/liquid-glass/liquid-glass";
 
 export interface Component {

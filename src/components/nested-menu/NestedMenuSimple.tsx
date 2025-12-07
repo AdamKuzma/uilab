@@ -154,7 +154,7 @@ export default function NestedMenuSimple({
         return null;
     };
 
-    const handleDragStart = (_event: DragStartEvent) => {
+    const handleDragStart = () => {
         // Drag started - no overlay needed
     };
 

@@ -216,6 +216,34 @@ export default function NestedMenu({
         return null;
     }, []);
     
+    // Helper function to find a node by id
+    const findNodeById = React.useCallback((items: Node[], id: string): Node | null => {
+        for (const item of items) {
+            if (item.name === id) return item;
+            if (item.nodes) {
+                const found = findNodeById(item.nodes, id);
+                if (found) return found;
+            }
+        }
+        return null;
+    }, []);
+
+    // Helper function to check if target is a descendant of parent
+    const isDescendantOf = React.useCallback((items: Node[], parentId: string, targetId: string): boolean => {
+        const parent = findNodeById(items, parentId);
+        if (!parent || !parent.nodes) return false;
+        
+        // Check direct children
+        if (parent.nodes.some(node => node.name === targetId)) return true;
+        
+        // Check recursively in descendants
+        for (const child of parent.nodes) {
+            if (isDescendantOf(items, child.name, targetId)) return true;
+        }
+        
+        return false;
+    }, [findNodeById]);
+    
     // Normalize drop location: "below item2" and "above item3" are the same if they're siblings
     const getNormalizedDropLocation = React.useCallback((id: string, position: DropPosition): { id: string; position: DropPosition } => {
         if (position === 'into') {
@@ -317,34 +345,6 @@ export default function NestedMenu({
             }
         };
     }, [activeNode, overId, dropPosition, items, enableNormalization, getNormalizedDropLocation, isDescendantOf]);
-
-    // Helper function to find a node by id
-    const findNodeById = React.useCallback((items: Node[], id: string): Node | null => {
-        for (const item of items) {
-            if (item.name === id) return item;
-            if (item.nodes) {
-                const found = findNodeById(item.nodes, id);
-                if (found) return found;
-            }
-        }
-        return null;
-    }, []);
-
-    // Helper function to check if target is a descendant of parent
-    const isDescendantOf = React.useCallback((items: Node[], parentId: string, targetId: string): boolean => {
-        const parent = findNodeById(items, parentId);
-        if (!parent || !parent.nodes) return false;
-        
-        // Check direct children
-        if (parent.nodes.some(node => node.name === targetId)) return true;
-        
-        // Check recursively in descendants
-        for (const child of parent.nodes) {
-            if (isDescendantOf(items, child.name, targetId)) return true;
-        }
-        
-        return false;
-    }, [findNodeById]);
 
     // Helper function to remove a node from anywhere in the tree
     const removeNode = (items: Node[], nodeId: string): { items: Node[], removed: Node | null } => {

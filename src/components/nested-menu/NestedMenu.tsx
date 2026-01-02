@@ -510,7 +510,7 @@ export default function NestedMenu({
     const isFill = width === 'fill';
     const isAuto = width === 'auto';
     const widthStyle = isFill ? { height, width: '100%' } : { height, width };
-    
+
     return (
         <div className={`bg-[var(--color-gray1)] border border-[var(--color-gray6)] overflow-x-hidden overscroll-y-contain rounded-xl py-2 overflow-y-auto ${isFill ? 'w-full' : 'my-0 mx-auto'} ${isAuto || isFill ? '' : 'max-w-sm'} shadow-[0_2px_5px_-2px_rgba(0,0,0,0.0.08)]`} style={widthStyle} onWheel={(e) => e.stopPropagation()}>
             {showHeader && (

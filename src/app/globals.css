@@ -195,12 +195,14 @@
   ::selection,
   input::selection,
   textarea::selection {
-    background: #E5E4E1 !important;
+    background: #E5E5E5 !important;
+    color: inherit !important;
   }
   ::-moz-selection,
   input::-moz-selection,
   textarea::-moz-selection {
-    background: #E5E4E1 !important;
+    background: #E5E5E5 !important;
+    color: inherit !important;
   }
   .dark ::selection,
   .dark input::selection,

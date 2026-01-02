@@ -161,7 +161,7 @@ export default function Search({ components, onComponentSelect, currentIndex }: 
                   {components[currentIndex]?.tags?.map(tag => (
                     <span
                       key={tag}
-                      className="px-2 py-0.5 rounded bg-[var(--muted-background)] text-xs text-muted-foreground font-mono"
+                      className="px-2 py-0.5 rounded bg-[var(--muted-background)] text-xs text-muted-foreground"
                     >
                       {tag}
                     </span>

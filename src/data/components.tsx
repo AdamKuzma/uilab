@@ -8,9 +8,9 @@ import InteractiveGraph from "@/components/interactive-graph/InteractiveGraph";
 import LineMinimap from "@/components/line-minimap/source";
 //import DictationWaveform from "@/components/dictation-waveform/main";
 import NestedMenu from "@/components/nested-menu/NestedMenu";
-// import MagneticHover from "@/components/magnetic-hover/MagneticHover";
+import MagneticHover from "@/components/magnetic-hover/MagneticHover";
 // import { AvatarFallbackExamples } from "@/components/fallback-avatar/FallbackAvatar";
-//import LiquidGlass from "@/components/liquid-glass/liquid-glass";
+// import LiquidGlass from "@/components/liquid-glass/liquid-glass";
 
 export interface Component {
   id: string;
@@ -100,7 +100,7 @@ export const components: Component[] = [
     description: "A recursive nested menu component with multiple levels that renders itself. Created for a client project.",
     component: <NestedMenu />,
     preview: <NestedMenu />,
-    tags: ["react", "menu", "navigation"],
+    tags: ["react", "dnd"],
   },
   // {
   //   id: "fallback-avatar",
@@ -110,14 +110,14 @@ export const components: Component[] = [
   //   preview: <AvatarFallbackExamples />,
   //   tags: ["react", "radix-ui", "avatar", "svg"],
   // },
-  // {
-  //   id: "magnetic-hover",
-  //   title: "Magnetic Hover",
-  //   description: "Interactive elements that magnetically pull towards the cursor.",
-  //   component: <MagneticHover />,
-  //   preview: <MagneticHover />,
-  //   tags: ["react", "animation", "mouse-effect"],
-  // },
+  {
+    id: "magnetic-hover",
+    title: "Magnetic Hover",
+    description: "Interactive hover effect that magnetically pull towards the cursor.",
+    component: <MagneticHover />,
+    preview: <MagneticHover />,
+    tags: ["react", "framer motion", "tailwind"],
+  },
   // {
   //   id: "liquid-glass",
   //   title: "Liquid Glass",

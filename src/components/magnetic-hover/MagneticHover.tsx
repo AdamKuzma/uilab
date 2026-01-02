@@ -118,7 +118,7 @@ export default function MagneticHover() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12"/>
         </svg>
       </IconTab>
-      <Cursor position={position} cursorRef={cursorRef} magneticOffsetRef={magneticOffsetRef} />
+      <Cursor position={position} cursorRef={cursorRef} />
       </ul>
       </div>
     </div>
@@ -294,10 +294,9 @@ const Separator = () => {
 type CursorProps = {
   position: Position;
   cursorRef: React.RefObject<HTMLLIElement | null>;
-  magneticOffsetRef: React.MutableRefObject<MagneticOffset>;
 };
 
-const Cursor = ({ position, cursorRef, magneticOffsetRef }: CursorProps) => {
+const Cursor = ({ position, cursorRef }: CursorProps) => {
   return (
     <motion.li 
       ref={cursorRef}

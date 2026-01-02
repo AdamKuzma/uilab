@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Spinner } from "./Spinner";
+import { Spinner } from "../spinner/Spinner";
 
 type ButtonState = "idle" | "loading" | "success";
 
@@ -47,3 +47,4 @@ export default function SmoothButton() {
     </div>
   ); 
 }
+

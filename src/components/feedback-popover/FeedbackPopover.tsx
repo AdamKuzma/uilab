@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
-import { Spinner } from "@/components/Spinner";
+import { Spinner } from "@/components/spinner/Spinner";
 import { useOnClickOutside } from "@/hooks/useOnClickOutside";
 
 type FormState = "idle" | "loading" | "success";
@@ -226,3 +226,4 @@ export default function FeedbackPopover() {
       </div>
     );
   }
+

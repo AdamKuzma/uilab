@@ -1,10 +1,10 @@
-import FeedbackPopover from "@/components/FeedbackPopover";
-import SmoothButton from "@/components/SmoothButton";
-import SmoothTabs from "@/components/SmoothTabs";
-import SmoothList from "@/components/SmoothList";
-import MultistepForm from "@/components/MultistepForm";
-import TrashAnimation from "@/components/TrashAnimation";
-import InteractiveGraph from "@/components/InteractiveGraph";
+import FeedbackPopover from "@/components/feedback-popover/FeedbackPopover";
+import SmoothButton from "@/components/smooth-button/SmoothButton";
+import SmoothTabs from "@/components/smooth-tabs/SmoothTabs";
+import SmoothList from "@/components/smooth-list/SmoothList";
+import MultistepForm from "@/components/multistep-form/MultistepForm";
+import TrashAnimation from "@/components/trash-animation/TrashAnimation";
+import InteractiveGraph from "@/components/interactive-graph/InteractiveGraph";
 import LineMinimap from "@/components/line-minimap/source";
 //import DictationWaveform from "@/components/dictation-waveform/main";
 import NestedMenu from "@/components/nested-menu/NestedMenu";
@@ -62,22 +62,22 @@ export const components: Component[] = [
     preview: <MultistepForm />,
     tags: ["react", "framer motion", "tailwind"],
   },
-  {
-    id: "trash-animation",
-    title: "Trash Animation",
-    description: "A trash animation component with smooth transitions between steps.",
-    component: <TrashAnimation />,
-    preview: <TrashAnimation />,
-    tags: ["react", "framer motion", "tailwind"],
-  },
-  {
-    id: "interactive-graph",
-    title: "Interactive Graph",
-    description: "",
-    component: <InteractiveGraph />,
-    preview: <InteractiveGraph />,
-    tags: ["react", "framer motion", "tailwind"],
-  },
+  // {
+  //   id: "trash-animation",
+  //   title: "Trash Animation",
+  //   description: "A trash animation component with smooth transitions between steps.",
+  //   component: <TrashAnimation />,
+  //   preview: <TrashAnimation />,
+  //   tags: ["react", "framer motion", "tailwind"],
+  // },
+  // {
+  //   id: "interactive-graph",
+  //   title: "Interactive Graph",
+  //   description: "",
+  //   component: <InteractiveGraph />,
+  //   preview: <InteractiveGraph />,
+  //   tags: ["react", "framer motion", "tailwind"],
+  // },
   {
     id: "line-minimap",
     title: "Line Minimap",

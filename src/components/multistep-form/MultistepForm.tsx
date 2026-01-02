@@ -126,3 +126,4 @@ const variants = {
     return { x: `${-110 * direction}%`, opacity: 0 };
   },
 };
+
